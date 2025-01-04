@@ -23,7 +23,7 @@ libdirs
     "../lib/SDL_image/lib/x64", -- SDL_image libraries (e.g., SDL2_image.lib)
     "../lib/SDL_mixer/lib/x64", -- SDL_mixer libraries (e.g., SDL2_mixer.lib)
     "../lib/SDL_ttf/lib/x64",   -- SDL_ttf libraries (e.g., SDL2_ttf.lib)
-    "$(SolutionDir)lib\\zlib\\contrib\\vstudio\\vc14\\x64\\ZlibStat\\$(Configuration)\\",
+    "$(SolutionDir)lib\\zlib\\contrib\\vstudio\\vc14\\x64\\ZlibStat$(Configuration)\\",
 
 }
 
