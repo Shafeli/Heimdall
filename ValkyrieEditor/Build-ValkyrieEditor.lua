@@ -1,5 +1,9 @@
 project "ValkyrieEditor"
+<<<<<<< HEAD
 kind "ConsoleApp"
+=======
+kind "ConsoleApp" -- Assuming it's a console application
+>>>>>>> parent of 8795c16 (Revert "project setup")
 language "C++"
 cppdialect "C++17"
 targetdir "Binaries/%{cfg.buildcfg}"

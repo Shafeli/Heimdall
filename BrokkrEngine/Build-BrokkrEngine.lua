@@ -39,13 +39,19 @@ links
 
 -- Post-build commands to copy DLLs to the target directory
 filter "configurations:Debug or Release or Dist"
+-- Post-build commands to copy DLLs to the target directory
 postbuildcommands
 {
-    "{COPY} lib/SDL2/bin/SDL2.dll %{cfg.targetdir}/",
-    "{COPY} lib/SDL_image/bin/SDL2_image.dll %{cfg.targetdir}/",
-    "{COPY} lib/SDL_mixer/bin/SDL2_mixer.dll %{cfg.targetdir}/",
-    "{COPY} lib/SDL_ttf/bin/SDL2_ttf.dll %{cfg.targetdir}/",
-    "{COPY} lib/zlib/bin/zlibstat.dll %{cfg.targetdir}/"
+    "xcopy \"$(SolutionDir)lib\\SDL2\\lib\\x64\\SDL2.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\SDL_image\\lib\\x64\\SDL2_image.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\SDL_image\\lib\\x64\\libpng16-16.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\SDL_image\\lib\\x64\\zlib1.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\SDL_image\\lib\\x64\\libjpeg-9.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\SDL_ttf\\lib\\x64\\SDL2_ttf.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\SDL_ttf\\lib\\x64\\libfreetype-6.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\SDL_mixer\\lib\\x64\\libmpg123-0.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\SDL_mixer\\lib\\x64\\SDL2_mixer.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\zlib\\contrib\\vstudio\\vc14\\x64\\ZlibStat$(Configuration)\\zlibstat.lib\" \"$(OutDir)\" /s /e /i /y"
 }
 
 targetdir("../Binaries/" .. OutputDir .. "/%{prj.name}")
