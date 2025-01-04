@@ -1,0 +1,4 @@
+        1 file(s) copied.
+        1 file(s) copied.
+F:\SideProjects\Heimdall\lib\SDL2\lib\x64\SDL2.dll
+1 File(s) copied
