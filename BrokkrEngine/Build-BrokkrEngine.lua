@@ -5,7 +5,12 @@ cppdialect "C++17"
 targetdir "Binaries/%{cfg.buildcfg}"
 staticruntime "off"
 
-files { "Source/**.h", "Source/**.cpp" }
+files {
+    "Source/**.h",
+    "Source/**.cpp",
+    "lib/TinyXML/**.h",
+    "lib/TinyXML/**.cpp",
+}
 
 includedirs
 {
@@ -15,6 +20,8 @@ includedirs
     "../lib/SDL_mixer/include", -- SDL_mixer headers
     "../lib/SDL_ttf/include",   -- SDL_ttf headers
     "../lib/zlib",              -- zlib headers
+    "../lib/Vulkan/Include",    -- Local Vulkan headers
+    "../lib/TinyXML",           -- Local TinyXML headers
 }
 
 libdirs
@@ -24,6 +31,8 @@ libdirs
     "../lib/SDL_mixer/lib/x64", -- SDL_mixer libraries (e.g., SDL2_mixer.lib)
     "../lib/SDL_ttf/lib/x64",   -- SDL_ttf libraries (e.g., SDL2_ttf.lib)
     "$(SolutionDir)lib\\zlib\\contrib\\vstudio\\vc14\\x64\\ZlibStat$(Configuration)\\",
+    "../lib/Vulkan/lib",        -- Local Vulkan libraries
+
 
 }
 
@@ -35,6 +44,7 @@ links
     "SDL2_mixer", -- Link SDL_mixer (SDL2_mixer.lib)
     "SDL2_ttf",   -- Link SDL_ttf (SDL2_ttf.lib)
     "zlibstat",   -- Link zlib (zlib.lib)
+    "vulkan-1",   -- Vulkan runtime library
 }
 
 -- Post-build commands to copy DLLs to the target directory
@@ -51,6 +61,8 @@ postbuildcommands
     "xcopy \"$(SolutionDir)lib\\SDL_ttf\\lib\\x64\\libfreetype-6.dll\" \"$(OutDir)\" /s /e /i /y",
     "xcopy \"$(SolutionDir)lib\\SDL_mixer\\lib\\x64\\libmpg123-0.dll\" \"$(OutDir)\" /s /e /i /y",
     "xcopy \"$(SolutionDir)lib\\SDL_mixer\\lib\\x64\\SDL2_mixer.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\Vulkan\\Bin\\vulkan-1.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\Vulkan\\Bin\\VkLayer_*.dll\" \"$(OutDir)\" /s /e /i /y",
     "xcopy \"$(SolutionDir)lib\\zlib\\contrib\\vstudio\\vc14\\x64\\ZlibStat$(Configuration)\\zlibstat.lib\" \"$(OutDir)\" /s /e /i /y"
 }
 
