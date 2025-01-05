@@ -1,5 +1,5 @@
 project "ValkyrieEditor"
-kind "ConsoleApp" -- Assuming it's a console application
+kind "ConsoleApp"
 language "C++"
 cppdialect "C++17"
 targetdir "Binaries/%{cfg.buildcfg}"
@@ -11,7 +11,7 @@ includedirs
 {
     "Source",
     "../BrokkrEngine/Source", -- Include BrokkrEngine
-    "../lib/imgui"
+    "../lib/ImGUI"
 
 }
 
