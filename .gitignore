@@ -1,6 +1,7 @@
 # Directories
 .vs/
 Binaries/
+lib/Vulkan/
 
 # Files
 *.vcxproj
