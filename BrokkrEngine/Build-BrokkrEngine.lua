@@ -5,7 +5,8 @@ cppdialect "C++17"
 targetdir "Binaries/%{cfg.buildcfg}"
 staticruntime "off"
 
-files {
+files
+{
     "Source/**.h",
     "Source/**.cpp",
     "lib/TinyXML/**.h",
@@ -22,6 +23,7 @@ includedirs
     "../lib/zlib",              -- zlib headers
     "../lib/Vulkan/Include",    -- Local Vulkan headers
     "../lib/TinyXML",           -- Local TinyXML headers
+    "../lib/Lua/include"        -- Include Lua headers
 }
 
 libdirs
@@ -32,8 +34,7 @@ libdirs
     "../lib/SDL_ttf/lib/x64",   -- SDL_ttf libraries (e.g., SDL2_ttf.lib)
     "$(SolutionDir)lib\\zlib\\contrib\\vstudio\\vc14\\x64\\ZlibStat$(Configuration)\\",
     "../lib/Vulkan/lib",        -- Local Vulkan libraries
-
-
+    "../lib/Lua/lib"            -- Lua library directory
 }
 
 links
@@ -45,6 +46,7 @@ links
     "SDL2_ttf",   -- Link SDL_ttf (SDL2_ttf.lib)
     "zlibstat",   -- Link zlib (zlib.lib)
     "vulkan-1",   -- Vulkan runtime library
+    "lua54"       -- Link to the Lua import library
 }
 
 -- Post-build commands to copy DLLs to the target directory
@@ -63,6 +65,7 @@ postbuildcommands
     "xcopy \"$(SolutionDir)lib\\SDL_mixer\\lib\\x64\\SDL2_mixer.dll\" \"$(OutDir)\" /s /e /i /y",
     "xcopy \"$(SolutionDir)lib\\Vulkan\\Bin\\vulkan-1.dll\" \"$(OutDir)\" /s /e /i /y",
     "xcopy \"$(SolutionDir)lib\\Vulkan\\Bin\\VkLayer_*.dll\" \"$(OutDir)\" /s /e /i /y",
+    "xcopy \"$(SolutionDir)lib\\Lua\\bin\\lua54.dll\" \"$(OutDir)\" /s /e /i /y",
     "xcopy \"$(SolutionDir)lib\\zlib\\contrib\\vstudio\\vc14\\x64\\ZlibStat$(Configuration)\\zlibstat.lib\" \"$(OutDir)\" /s /e /i /y"
 }
 

@@ -1,7 +1,11 @@
 #pragma once
 
+
+
 namespace Core {
 
-	void PrintHelloWorld();
+    void InitializeLua();
+
+    void PrintHelloWorld();
 
 }

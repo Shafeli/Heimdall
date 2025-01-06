@@ -18,6 +18,14 @@ links
     "BrokkrEngine"
 }
 
+-- Post-build commands to copy DLLs to the target directory
+filter "configurations:Debug or Release or Dist"
+postbuildcommands
+{
+    "xcopy \"$(SolutionDir)lib\\Lua\\bin\\lua54.dll\" \"$(OutDir)\" /s /e /i /y",
+}
+
+
 targetdir("../Binaries/" .. OutputDir .. "/%{prj.name}")
 objdir("../Binaries/Intermediates/" .. OutputDir .. "/%{prj.name}")
 
