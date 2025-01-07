@@ -4,6 +4,20 @@
 #include <imgui.h>
 #include "Core/Core.h"
 
+
+class EditorCoreSystem final : public Brokkr::CoreSystems
+{
+
+public:
+
+    virtual void Destroy() override;
+};
+
+
+void EditorCoreSystem::Destroy()
+{
+}
+
 int main()
 {
     ImGui::CreateContext();
@@ -15,6 +29,8 @@ int main()
     Core::PrintHelloWorld();
 
 	std::cout << "From Val Editor!\n";
+
+
 	system("pause");
 	return 0;
 
