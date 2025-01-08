@@ -1,15 +1,12 @@
 #pragma once
+#include <chrono>
 #include <memory>
 #include <vector>
+#include <typeindex>
+#include <typeinfo>
+#include <algorithm>
 
-
-namespace Core {
-
-    void InitializeLua();
-
-    void PrintHelloWorld();
-
-}
+namespace Core { void PrintHelloWorld(); }
 
 namespace Brokkr
 {
@@ -30,18 +27,27 @@ namespace Brokkr
 
     protected:
         CoreSystems* m_pCoreManager;
-
     };
 
     class CoreSystems
     {
 
+        int frameCount = 0;
+        double frameTime = 0;
+
     protected:
-        // inline static Logger m_fileLog{ "CoreSystemLog" };
         std::vector<std::unique_ptr<System>> m_pCoreSubsystems;
+        bool isRunning = true;
+        std::chrono::time_point<std::chrono::steady_clock> lastFrameTime = std::chrono::high_resolution_clock::now();
+
+        double m_DeltaTime = 0;
+        int m_currentFPS = 0;
 
     public:
         virtual ~CoreSystems() = default;
+
+        void UpdateDelta();
+        [[nodiscard]] double GetLastDeltaTime() const { return m_DeltaTime; }
 
         template <typename CoreSubsystem>
         CoreSubsystem* GetCoreSystem()
@@ -62,15 +68,12 @@ namespace Brokkr
         template <typename CoreSubsystem, typename ... Args>
         CoreSubsystem* AddCoreSystem(Args&&... args)
         {
+            static_assert(std::is_base_of_v<System, CoreSubsystem>,
+                "System must derive from Brokkr::System");
+
             std::unique_ptr<CoreSubsystem> newCoreSubsystem = std::make_unique<CoreSubsystem>(this, std::forward<Args>(args)...);
-
-            CoreSubsystem* result = newCoreSubsystem.get(); // Get a raw pointer to the component
-            m_pCoreSubsystems.emplace_back(std::move(newCoreSubsystem)); // Add the system to the vector
-
-            if (!result)
-            {
-                // const std::string error = "Error Core System Failed to : Construct a Subsystem!";
-            }
+            CoreSubsystem* result = newCoreSubsystem.get(); // Get a raw pointer
+            m_pCoreSubsystems.emplace_back(std::move(newCoreSubsystem));
             return result; // Return a pointer
         }
 
@@ -94,6 +97,17 @@ namespace Brokkr
                     }
                 }
             }
+        }
+
+        // Check if a subsystem exists
+        template <typename CoreSubsystem>
+        bool IsSystemAvailable()
+        {
+            return std::any_of(m_pCoreSubsystems.begin(), m_pCoreSubsystems.end(),
+                [](const std::unique_ptr<System>& system) 
+                {
+                    return typeid(*system) == typeid(CoreSubsystem);
+                });
         }
 
         virtual void Destroy() = 0;
