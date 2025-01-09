@@ -58,27 +58,41 @@ void Brokkr::CoreSystems::Initialize()
     // attempt to initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL could not initialize! SDL_Error: %s", SDL_GetError());
-        return;
+        // SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL could not initialize! SDL_Error: %s", SDL_GetError());
+        m_SDL_Systems = false;
     }
-
+    else
+    {
+        m_SDL_Systems = true;
+    }
+    
     // Initialize SDL_image
     if (IMG_Init(IMG_INIT_PNG) < 0)
     {
-        return;
+        m_IMG_Systems = false;
+    }
+    else
+    {
+        m_IMG_Systems = true;
     }
 
     if (Mix_Init(MIX_INIT_MP3) < 0)
     {
-        return;
+        m_Mix_Systems = false;
+    }
+    else
+    {
+        m_Mix_Systems = true;
     }
 
     if (TTF_Init() == -1)
     {
-        //m_appLogger.Log(Logger::LogLevel::kError, "SDL_TTF could not initialize! Check SDL_Error");
-        return;
+        m_TTF_Systems = false;
     }
-
+    else
+    {
+        m_TTF_Systems = true;
+    }
 }
 
 void Brokkr::CoreSystems::Destroy()

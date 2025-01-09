@@ -1,10 +1,10 @@
 #pragma once
+#include <algorithm>
 #include <chrono>
 #include <memory>
-#include <vector>
-#include <typeindex>
 #include <typeinfo>
-#include <algorithm>
+#include <vector>
+#include "Utility/DeleteRuleOfFive.h"
 
 namespace Core { void PrintHelloWorld(); }
 
@@ -12,7 +12,7 @@ namespace Brokkr
 {
     class CoreSystems;
 
-    class System
+    class System : public DeleteRuleOfFive
     {
 
     public:
@@ -29,29 +29,27 @@ namespace Brokkr
         CoreSystems* m_pCoreManager;
     };
 
-    class CoreSystems
+    class CoreSystems : public DeleteRuleOfFive
     {
         bool m_SDL_Systems = false;
         bool m_IMG_Systems = false;
         bool m_Mix_Systems = false;
         bool m_TTF_Systems = false;
-
         int frameCount = 0;
+        std::vector<std::unique_ptr<System>> m_pCoreSubsystems;
 
     protected:
 
-        std::vector<std::unique_ptr<System>> m_pCoreSubsystems;
-        bool isRunning = true;
         std::chrono::time_point<std::chrono::steady_clock> lastFrameTime = std::chrono::high_resolution_clock::now();
-
         double m_DeltaTime = 0;
         double frameTimeMS = 0;
         int m_currentAverageFPS = 0;
+        bool isRunning = true;
 
     public:
         void UpdateDelta();
 
-        virtual ~CoreSystems() = default;
+        virtual ~CoreSystems() override = default;
         virtual void Initialize();
 
         [[nodiscard]] double GetLastDeltaTime() const { return m_DeltaTime; }
@@ -111,7 +109,7 @@ namespace Brokkr
         bool IsSystemAvailable()
         {
             return std::any_of(m_pCoreSubsystems.begin(), m_pCoreSubsystems.end(),
-                [](const std::unique_ptr<System>& system) 
+                [](const std::unique_ptr<System>& system)
                 {
                     return typeid(*system) == typeid(CoreSubsystem);
                 });

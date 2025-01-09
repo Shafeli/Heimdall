@@ -27,6 +27,8 @@ void Brokkr::SDLRenderer::RenderCopy(SDL_Texture* texture, int x, int y, int w, 
     destination.w = w;
     destination.h = h;
 
+    M_PI;
+
     SDL_RenderCopy(m_pRenderer, texture, nullptr, &destination);
 }
 

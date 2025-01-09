@@ -9,7 +9,11 @@
 #include "Core/Core.h"
 #include "SDLWindow/SDLWindow.h"
 
+// TODO: Edge cases possible issues SDLWindowManagement system
+/*
+    * Adding auxiliary renderers for a window would break index and window organization
 
+*/
 namespace Brokkr
 {
     class SDLRenderer;
@@ -46,7 +50,7 @@ namespace Brokkr
         SDLWindow* AddWindow(Args&&... args)
         {
             static_assert(std::is_base_of_v<Brokkr::SDLWindow, SDLWindow>,
-                "SDLWindow must derive from Brokkr::SDLWindow");
+                "Window must derive from Brokkr::SDLWindow");
 
             auto newWindow = std::make_unique<SDLWindow>(std::forward<Args>(args)...);
             SDLWindow* result = newWindow.get();
@@ -61,34 +65,73 @@ namespace Brokkr
             return result;
         }
 
-        // Remove a window and its associated renderer
+        // Remove a window and its renderer
         template <typename SDLWindow>
         void RemoveWindow(SDLWindow* window)
         {
             static_assert(std::is_base_of_v<Brokkr::SDLWindow, SDLWindow>,
-                "SDLWindow must derive from Brokkr::SDLWindow");
+                "Window must derive from Brokkr::SDLWindow");
 
-            auto it = std::find_if(m_pWindows.begin(), m_pWindows.end(),
-                [window](const std::unique_ptr<Brokkr::SDLWindow>& currentWindow)
-                {
-                    return currentWindow.get() == window;
-                });
+            const auto findWindow = std::find_if
+            (
+                m_pWindows.begin(),
+                m_pWindows.end(),
+                [window](const std::unique_ptr<SDLWindow>& currentWindow) {return currentWindow.get() == window; }
+            );
 
-            if (it != m_pWindows.end())
+            if (findWindow != m_pWindows.end())
             {
-                size_t index = std::distance(m_pWindows.begin(), it);
+                const size_t index = std::distance(m_pWindows.begin(), findWindow);
                 RemoveRenderer(index); // Remove associated renderer by index
-                (*it)->Destroy();
-                m_pWindows.erase(it);
+                (*findWindow)->Destroy();
+                m_pWindows.erase(findWindow);
             }
         }
+
+        // Get renderer associated with a specific window
+        SDLRenderer* GetRendererForWindow(SDLWindow* window) const
+        {
+            const auto findWindow = std::find_if
+            (
+                m_pWindows.begin(),
+                m_pWindows.end(),
+                [window](const std::unique_ptr<SDLWindow>& currentWindow) {return currentWindow.get() == window; }
+            );
+
+            if (findWindow != m_pWindows.end())
+            {
+                size_t index = std::distance(m_pWindows.begin(), findWindow);
+                return GetRenderer(index);
+            }
+
+            return nullptr;
+        }
+
+        virtual void Destroy() override
+        {
+            // Destroy renderers first
+            for (auto& renderer : m_pRenderers)
+            {
+                renderer->Destroy();
+            }
+            m_pRenderers.clear();
+
+            // Then destroy windows
+            for (auto& window : m_pWindows)
+            {
+                window->Destroy();
+            }
+            m_pWindows.clear();
+        }
+
+    private:
 
         // Add a new renderer for a window
         template <typename SDLRenderer, typename... Args>
         SDLRenderer* AddRenderer(SDLWindow* window, Args&&... args)
         {
             static_assert(std::is_base_of_v<Brokkr::SDLRenderer, SDLRenderer>,
-                "SDLRenderer must derive from Brokkr::SDLRenderer");
+                "Renderer must derive from Brokkr::SDLRenderer");
 
             auto newRenderer = std::make_unique<SDLRenderer>(window, std::forward<Args>(args)...);
             SDLRenderer* result = newRenderer.get();
@@ -117,40 +160,6 @@ namespace Brokkr
             }
         }
 
-        // Get renderer associated with a specific window
-        SDLRenderer* GetRendererForWindow(SDLWindow* window) const
-        {
-            auto it = std::find_if(m_pWindows.begin(), m_pWindows.end(),
-                [window](const std::unique_ptr<SDLWindow>& currentWindow)
-                {
-                    return currentWindow.get() == window;
-                });
-
-            if (it != m_pWindows.end())
-            {
-                size_t index = std::distance(m_pWindows.begin(), it);
-                return GetRenderer(index);
-            }
-
-            return nullptr;
-        }
-
-        virtual void Destroy() override
-        {
-            // Destroy renderers first
-            for (auto& renderer : m_pRenderers)
-            {
-                renderer->Destroy();
-            }
-            m_pRenderers.clear();
-
-            // Then destroy windows
-            for (auto& window : m_pWindows)
-            {
-                window->Destroy();
-            }
-            m_pWindows.clear();
-        }
     };
 
 }
