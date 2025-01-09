@@ -4,76 +4,153 @@
 #include <cstring>
 #include <memory>
 #include <type_traits>
+
+#include "SDLRenderer.h"
 #include "Core/Core.h"
 #include "SDLWindow/SDLWindow.h"
 
-class SDLWindowSystem final : public Brokkr::System
+
+namespace Brokkr
 {
+    class SDLRenderer;
 
-    std::vector<std::unique_ptr<Brokkr::SDLWindow>> m_pWindows;
-
-public:
-    explicit SDLWindowSystem(Brokkr::CoreSystems* pCoreManager)
-        : System(pCoreManager)
+    class SDLWindowSystem final : public Brokkr::System
     {
-        Init();
-    }
+        std::vector<std::unique_ptr<SDLWindow>> m_pWindows;
+        std::vector<std::unique_ptr<SDLRenderer>> m_pRenderers;
 
-    void Init();
-
-    template <typename SDLWindow>
-    SDLWindow* GetWindowByName(const char* pWindowTitle)
-    {
-        for (auto& pWindow : m_pWindows)
+    public:
+        explicit SDLWindowSystem(CoreSystems* pCoreManager)
+            : System(pCoreManager)
         {
-            // If the cast is successful
-            if (Brokkr::SDLWindow* target = pWindow.get())
-            {
-                if (std::strcmp(target->GetTitle(), pWindowTitle) == 0)
-                    return target;
-            }
+            //
         }
 
-        return nullptr; // If no window is found
-    }
-
-    template <typename SDLWindow, typename ... Args>
-    SDLWindow* AddWindow(Args&&... args)
-    {
-        static_assert(std::is_base_of_v<Brokkr::SDLWindow, SDLWindow>,
-            "SDLWindow must derive from Brokkr::SDLWindow");
-
-        auto newWindow = std::make_unique<SDLWindow>(std::forward<Args>(args)...);
-        SDLWindow* result = newWindow.get();
-        m_pWindows.emplace_back(std::move(newWindow));
-
-        if (!result)
+        // Get window by name
+        template <typename SDLWindow>
+        SDLWindow* GetWindowByName(const char* pWindowTitle)
         {
+            for (auto& pWindow : m_pWindows)
+            {
+                if (Brokkr::SDLWindow* target = pWindow.get())
+                {
+                    if (std::strcmp(target->GetTitle(), pWindowTitle) == 0)
+                        return target;
+                }
+            }
             return nullptr;
         }
 
-        return result; // Return a pointer
-    }
-
-    template<typename SDLWindow>
-    void RemoveWindow(SDLWindow* window)
-    {
-        static_assert(std::is_base_of_v<Brokkr::SDLWindow, SDLWindow>,
-            "SDLWindow must derive from Brokkr::SDLWindow");
-
-        auto it = std::find_if(m_pWindows.begin(), m_pWindows.end(),
-            [window](const std::unique_ptr<Brokkr::SDLWindow>& currentWindow)
-            {
-                return currentWindow.get() == window;
-            });
-
-        if (it != m_pWindows.end())
+        // Add a new window
+        template <typename SDLWindow, typename... Args>
+        SDLWindow* AddWindow(Args&&... args)
         {
-            (*it)->Destroy();
-            m_pWindows.erase(it);
+            static_assert(std::is_base_of_v<Brokkr::SDLWindow, SDLWindow>,
+                "SDLWindow must derive from Brokkr::SDLWindow");
+
+            auto newWindow = std::make_unique<SDLWindow>(std::forward<Args>(args)...);
+            SDLWindow* result = newWindow.get();
+            m_pWindows.emplace_back(std::move(newWindow));
+
+            if (result)
+            {
+                // Create a default renderer tied to this window
+                AddRenderer<SDLRenderer>(result);
+            }
+
+            return result;
         }
-    }
 
-    virtual void Destroy() override;
-};
+        // Remove a window and its associated renderer
+        template <typename SDLWindow>
+        void RemoveWindow(SDLWindow* window)
+        {
+            static_assert(std::is_base_of_v<Brokkr::SDLWindow, SDLWindow>,
+                "SDLWindow must derive from Brokkr::SDLWindow");
 
+            auto it = std::find_if(m_pWindows.begin(), m_pWindows.end(),
+                [window](const std::unique_ptr<Brokkr::SDLWindow>& currentWindow)
+                {
+                    return currentWindow.get() == window;
+                });
+
+            if (it != m_pWindows.end())
+            {
+                size_t index = std::distance(m_pWindows.begin(), it);
+                RemoveRenderer(index); // Remove associated renderer by index
+                (*it)->Destroy();
+                m_pWindows.erase(it);
+            }
+        }
+
+        // Add a new renderer for a window
+        template <typename SDLRenderer, typename... Args>
+        SDLRenderer* AddRenderer(SDLWindow* window, Args&&... args)
+        {
+            static_assert(std::is_base_of_v<Brokkr::SDLRenderer, SDLRenderer>,
+                "SDLRenderer must derive from Brokkr::SDLRenderer");
+
+            auto newRenderer = std::make_unique<SDLRenderer>(window, std::forward<Args>(args)...);
+            SDLRenderer* result = newRenderer.get();
+            m_pRenderers.emplace_back(std::move(newRenderer));
+
+            return result;
+        }
+
+        // Get a renderer by its index
+        SDLRenderer* GetRenderer(size_t index) const
+        {
+            if (index < m_pRenderers.size())
+            {
+                return m_pRenderers[index].get();
+            }
+            return nullptr;
+        }
+
+        // Remove a renderer by index
+        void RemoveRenderer(size_t index)
+        {
+            if (index < m_pRenderers.size())
+            {
+                m_pRenderers[index]->Destroy();
+                m_pRenderers.erase(m_pRenderers.begin() + index);
+            }
+        }
+
+        // Get renderer associated with a specific window
+        SDLRenderer* GetRendererForWindow(SDLWindow* window) const
+        {
+            auto it = std::find_if(m_pWindows.begin(), m_pWindows.end(),
+                [window](const std::unique_ptr<SDLWindow>& currentWindow)
+                {
+                    return currentWindow.get() == window;
+                });
+
+            if (it != m_pWindows.end())
+            {
+                size_t index = std::distance(m_pWindows.begin(), it);
+                return GetRenderer(index);
+            }
+
+            return nullptr;
+        }
+
+        virtual void Destroy() override
+        {
+            // Destroy renderers first
+            for (auto& renderer : m_pRenderers)
+            {
+                renderer->Destroy();
+            }
+            m_pRenderers.clear();
+
+            // Then destroy windows
+            for (auto& window : m_pWindows)
+            {
+                window->Destroy();
+            }
+            m_pWindows.clear();
+        }
+    };
+
+}

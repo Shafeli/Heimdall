@@ -5,20 +5,27 @@
 
 class EditorCoreSystem final : public Brokkr::CoreSystems
 {
-
+	Brokkr::SDLWindowSystem* m_sdlWindowManager = nullptr;
 public:
-	void Init()
+	virtual void Initialize() override
 	{
-		auto WindowManager = AddCoreSystem<SDLWindowSystem>();
-		WindowManager->AddWindow<Brokkr::SDLWindow>("EditorWindowMain", 1024, 768);
+		CoreSystems::Initialize();
 	}
+
+	void Build()
+	{
+		m_sdlWindowManager = AddCoreSystem<Brokkr::SDLWindowSystem>();
+		m_sdlWindowManager->AddWindow<Brokkr::SDLWindow>("EditorWindowMain", 1024, 768);
+	}
+
 	void Run()
 	{
         while (isRunning)
         {
 			UpdateDelta();
 
-			// Update logic
+			// Update logic here:
+
         }
 		
 	}
@@ -29,19 +36,21 @@ public:
 
 void EditorCoreSystem::Destroy()
 {
+	CoreSystems::Destroy();
+	m_sdlWindowManager = nullptr;
 }
 
 int main()
 {
 
-	std::cout << "From Val Editor!\n";
+	std::cout << "Welcome to Val Editor!\n";
 	auto Editor = EditorCoreSystem();
 
-	Editor.Init();
-
+	Editor.Initialize();
+	Editor.Build();
 	Editor.Run();
-	system("pause");
-	 
+	Editor.Destroy();
+
 	return 0;
 
 }

@@ -31,22 +31,29 @@ namespace Brokkr
 
     class CoreSystems
     {
+        bool m_SDL_Systems = false;
+        bool m_IMG_Systems = false;
+        bool m_Mix_Systems = false;
+        bool m_TTF_Systems = false;
 
         int frameCount = 0;
-        double frameTime = 0;
 
     protected:
+
         std::vector<std::unique_ptr<System>> m_pCoreSubsystems;
         bool isRunning = true;
         std::chrono::time_point<std::chrono::steady_clock> lastFrameTime = std::chrono::high_resolution_clock::now();
 
         double m_DeltaTime = 0;
-        int m_currentFPS = 0;
+        double frameTimeMS = 0;
+        int m_currentAverageFPS = 0;
 
     public:
-        virtual ~CoreSystems() = default;
-
         void UpdateDelta();
+
+        virtual ~CoreSystems() = default;
+        virtual void Initialize();
+
         [[nodiscard]] double GetLastDeltaTime() const { return m_DeltaTime; }
 
         template <typename CoreSubsystem>
@@ -110,6 +117,6 @@ namespace Brokkr
                 });
         }
 
-        virtual void Destroy() = 0;
+        virtual void Destroy();
     };
 }
