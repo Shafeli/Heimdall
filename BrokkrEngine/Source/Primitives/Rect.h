@@ -62,6 +62,26 @@ namespace Brokkr
             m_size = { width, height };
         }
 
+        void Scale(TypeName factor)
+        {
+            m_size.x *= factor;
+            m_size.y *= factor;
+        }
+
+        void Expand(TypeName factor)
+        {
+            m_position.x -= m_size.x * (factor - 1) / 2;
+            m_position.y -= m_size.y * (factor - 1) / 2;
+            m_size.x *= factor;
+            m_size.y *= factor;
+        }
+
+        void ClampToBounds(const Rect<TypeName>& bounds)
+        {
+            m_position.x = std::max(bounds.GetLeft(), std::min(m_position.x, bounds.GetRight() - m_size.x));
+            m_position.y = std::max(bounds.GetTop(), std::min(m_position.y, bounds.GetBottom() - m_size.y));
+        }
+
         [[nodiscard]] bool Contains(const Vector2<TypeName>& point) const
         {
             return point.x >= m_position.x && point.x < m_position.x + m_size.x
@@ -97,6 +117,20 @@ namespace Brokkr
             // return the intersection rects
             return Rect({ x1, y1 }, { x2 - x1, y2 - y1 });
         }
+
+        void AddMargin(TypeName marginX, TypeName marginY)
+        {
+            m_position.x -= marginX;
+            m_position.y -= marginY;
+            m_size.x += marginX * 2;
+            m_size.y += marginY * 2;
+        }
+
+        [[nodiscard]] TypeName DiagonalLength() const
+        {
+            return m_size.Length();
+        }
+
 
         Vector2<TypeName>& GetPosition()
         {
