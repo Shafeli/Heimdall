@@ -1,19 +1,21 @@
 #pragma once
 #include <algorithm>
+
+#include "Triangle.h"
 #include "Vector2.h"
 
 namespace Brokkr
 {
     template<typename TypeName>
-    class Rect
+    class Rectangle
     {
         Vector2<TypeName> m_size;
         Vector2<TypeName> m_position;
 
     public:
-        Rect() = default;
+        Rectangle() = default;
 
-        Rect(const Vector2<TypeName>& position, const Vector2<TypeName>& size)
+        Rectangle(const Vector2<TypeName>& position, const Vector2<TypeName>& size)
             : m_size(size), m_position(position)
         {}
 
@@ -39,7 +41,7 @@ namespace Brokkr
 
         [[nodiscard]] Vector2<TypeName> GetCenter() const
         {
-            TypeName centerX = m_position.x + m_size.x / 2;
+            TypeName centerX = m_position.x + m_size.x / 2; 
             TypeName centerY = m_position.y + m_size.y / 2;
             return Vector2<TypeName>(centerX, centerY);
         }
@@ -47,7 +49,7 @@ namespace Brokkr
         [[nodiscard]] TypeName GetAdjustedY(TypeName y) const { return m_position.y + y; }
         [[nodiscard]] TypeName GetAdjustedX(TypeName x) const { return m_position.x + x; }
 
-        bool operator==(const Rect<TypeName>& other) const
+        bool operator==(const Rectangle<TypeName>& other) const
         {
             return m_position == other.m_position && m_size == other.m_size;
         }
@@ -76,7 +78,7 @@ namespace Brokkr
             m_size.y *= factor;
         }
 
-        void ClampToBounds(const Rect<TypeName>& bounds)
+        void ClampToBounds(const Rectangle<TypeName>& bounds)
         {
             m_position.x = std::max(bounds.GetLeft(), std::min(m_position.x, bounds.GetRight() - m_size.x));
             m_position.y = std::max(bounds.GetTop(), std::min(m_position.y, bounds.GetBottom() - m_size.y));
@@ -88,7 +90,7 @@ namespace Brokkr
                 && point.y >= m_position.y && point.y < m_position.y + m_size.y;
         }
 
-        [[nodiscard]] bool Intersects(const Rect<TypeName>& other) const
+        [[nodiscard]] bool Intersects(const Rectangle<TypeName>& other) const
         {
             return m_position.x < other.m_position.x + other.m_size.x &&
                 m_position.x + m_size.x > other.m_position.x &&
@@ -96,8 +98,26 @@ namespace Brokkr
                 m_position.y + m_size.y > other.m_position.y;
         }
 
+        [[nodiscard]] bool Intersects(const Triangle<TypeName>& triangle) const
+        {
+            // Check if any triangle vertex is inside the rectangle
+            for (const auto& vertex : triangle.GetVertices())
+            {
+                if (Contains(vertex)) return true;
+            }
+
+            // Check if any rectangle edge intersects the triangle
+            for (const auto& edge : GetEdges())
+            {
+                if (edge.Intersects(triangle)) return true;
+            }
+
+            return false;
+        }
+
+
         // Returns a Rect of the two Rects intersection area
-        [[nodiscard]] Rect<TypeName> Intersection(const Rect<TypeName>& other) const
+        [[nodiscard]] Rectangle<TypeName> Intersection(const Rectangle<TypeName>& other) const
         {
             // Coordinates of the top left corner of the intersection rect
             int x1 = std::max<TypeName>(m_position.x, other.m_position.x);
@@ -111,11 +131,11 @@ namespace Brokkr
             if (x2 <= x1 || y2 <= y1) 
             {
                 // The rects do not intersect
-                return Rect({ 0, 0 }, { 0, 0 });
+                return Rectangle({ 0, 0 }, { 0, 0 });
             }
 
             // return the intersection rects
-            return Rect({ x1, y1 }, { x2 - x1, y2 - y1 });
+            return Rectangle({ x1, y1 }, { x2 - x1, y2 - y1 });
         }
 
         void AddMargin(TypeName marginX, TypeName marginY)

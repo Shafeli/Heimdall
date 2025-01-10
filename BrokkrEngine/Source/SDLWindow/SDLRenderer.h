@@ -1,6 +1,6 @@
 #pragma once
 #include "Color/Color.h"
-#include "Primitives/Rect.h"
+#include "Primitives/Rectangle.h"
 
 struct SDL_Renderer;
 struct SDL_Texture;
@@ -29,7 +29,7 @@ namespace Brokkr
 
         void RenderCopy(SDL_Texture* texture, int x, int y, int w, int h) const;
 
-        void RenderCopy(SDL_Texture* texture, Rect<int> transform, Rect<int> sourceTransform) const;
+        void RenderCopy(SDL_Texture* texture, Rectangle<int> transform, Rectangle<int> sourceTransform) const;
 
         void Render() const;
 

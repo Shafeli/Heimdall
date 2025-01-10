@@ -15,7 +15,8 @@ files
 
 includedirs
 {
-    "Source",                   -- Your source directory
+    "Source",                   -- source directory
+    "Source/Primitives",
     "../lib/SDL2/include",      -- SDL2 headers
     "../lib/SDL_image/include", -- SDL_image headers
     "../lib/SDL_mixer/include", -- SDL_mixer headers

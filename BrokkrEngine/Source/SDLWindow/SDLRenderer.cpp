@@ -32,7 +32,7 @@ void Brokkr::SDLRenderer::RenderCopy(SDL_Texture* texture, int x, int y, int w, 
     SDL_RenderCopy(m_pRenderer, texture, nullptr, &destination);
 }
 
-void Brokkr::SDLRenderer::RenderCopy(SDL_Texture* texture, Rect<int> transform, Rect<int> sourceTransform) const
+void Brokkr::SDLRenderer::RenderCopy(SDL_Texture* texture, Rectangle<int> transform, Rectangle<int> sourceTransform) const
 {
     SDL_Rect destination;
     destination.x = transform.GetX();
