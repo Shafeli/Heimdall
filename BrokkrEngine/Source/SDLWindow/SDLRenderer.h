@@ -5,6 +5,7 @@
 struct SDL_Renderer;
 struct SDL_Texture;
 
+// TODO: Update Rendering Shapes to use Engine Primitives & color
 namespace Brokkr
 {
     class SDLWindow;
