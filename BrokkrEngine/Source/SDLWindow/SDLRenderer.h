@@ -1,5 +1,8 @@
 #pragma once
+#include "Circle.h"
 #include "Color/Color.h"
+#include "Primitives/Circle.h"
+#include "Primitives/Line.h"
 #include "Primitives/Rectangle.h"
 
 struct SDL_Renderer;
@@ -35,6 +38,10 @@ namespace Brokkr
         void Render() const;
 
         void SetRenderDrawColor(const Color* pColor) const;
+
+        void RenderCircle(const Circle<int>& pCircle, const Color& pColor) const;
+        void RenderSquare(const Rectangle<int>& rectangle, const Color& color);
+        void RenderLine(const Line<int>& line, const Color& color);
 
         void RenderCircle(int centerX, int centerY, int radius, int red, int green, int blue) const;
         void RenderSquare(int x, int y, int h, int w, int red, int green, int blue, int opacity) const;

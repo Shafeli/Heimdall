@@ -68,6 +68,37 @@ void Brokkr::SDLRenderer::SetRenderDrawColor(const Color* pColor) const
     );
 }
 
+void Brokkr::SDLRenderer::RenderCircle(const Circle<int>& pCircle, const Color& pColor) const
+{
+    RenderCircle(
+        pCircle.GetCenter().x,
+        pCircle.GetCenter().y,
+        pCircle.GetRadius(),
+        pColor.GetSdlColor()->r,
+        pColor.GetSdlColor()->g,
+        pColor.GetSdlColor()->b
+    );
+}
+
+void Brokkr::SDLRenderer::RenderSquare(const Rectangle<int>& rectangle, const Color& color)
+{
+    RenderSquare(
+        rectangle.GetX(),
+        rectangle.GetY(),
+        rectangle.GetHeight(),
+        rectangle.GetWidth(),
+        color.GetSdlColor()->r,
+        color.GetSdlColor()->g,
+        color.GetSdlColor()->b,
+        color.GetSdlColor()->a)
+    ;
+}
+
+void Brokkr::SDLRenderer::RenderLine(const Line<int>& line, const Color& color)
+{
+    //
+}
+
 void Brokkr::SDLRenderer::RenderCircle(int centerX, int centerY, int radius, int red, int green, int blue) const
 {
     SDL_SetRenderDrawColor
