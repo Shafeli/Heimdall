@@ -22,6 +22,7 @@ includedirs
 {
     "Source",
     "../BrokkrEngine/Source", -- Include BrokkrEngine
+    "../BrokkrEngine/Source/Primitives",
     "../lib/imgui",
     "../lib/imgui/backends",
     "../lib/SDL2/include",   -- Include SDL2 headers

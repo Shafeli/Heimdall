@@ -94,9 +94,21 @@ void Brokkr::SDLRenderer::RenderSquare(const Rectangle<int>& rectangle, const Co
     ;
 }
 
-void Brokkr::SDLRenderer::RenderLine(const Line<int>& line, const Color& color)
+void Brokkr::SDLRenderer::RenderLine(const Line<int>& line, const Color& color) const
 {
-    //
+    const Vector2<int> startPoint = line.GetStart();
+    const Vector2<int> endPoint = line.GetEnd();
+
+    RenderLine
+    (
+        startPoint.x, 
+        startPoint.y, 
+        endPoint.x, 
+        endPoint.y, 
+        color.GetSdlColor()->r,
+        color.GetSdlColor()->g,
+        color.GetSdlColor()->b
+    );
 }
 
 void Brokkr::SDLRenderer::RenderCircle(int centerX, int centerY, int radius, int red, int green, int blue) const
@@ -159,6 +171,7 @@ void Brokkr::SDLRenderer::RenderSquare(int x, int y, int h, int w, int red, int 
     rect.y = y;
 
     SDL_RenderFillRect(m_pRenderer, &rect);
+    // SDL_RenderDrawRect(m_pRenderer, &rect);
 }
 
 void Brokkr::SDLRenderer::RenderLine(int x1, int y1, int x2, int y2, int red, int green, int blue) const

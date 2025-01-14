@@ -10,7 +10,8 @@ files { "Source/**.h", "Source/**.cpp" }
 includedirs
 {
     "Source",
-    "../BrokkrEngine/Source" -- Include BrokkrEngine
+    "../BrokkrEngine/Source", -- Include BrokkrEngine
+    "../BrokkrEngine/Source/Primitives/",
 }
 
 links

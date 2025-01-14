@@ -1,14 +1,14 @@
 #pragma once
 #include "Circle.h"
+#include "Line.h"
+#include "Rectangle.h"
 #include "Color/Color.h"
-#include "Primitives/Circle.h"
-#include "Primitives/Line.h"
-#include "Primitives/Rectangle.h"
 
 struct SDL_Renderer;
 struct SDL_Texture;
 
 // TODO: Update Rendering Shapes to use Engine Primitives & color
+// TODO: Queuing to renderer with depth sorting
 namespace Brokkr
 {
     class SDLWindow;
@@ -41,7 +41,7 @@ namespace Brokkr
 
         void RenderCircle(const Circle<int>& pCircle, const Color& pColor) const;
         void RenderSquare(const Rectangle<int>& rectangle, const Color& color);
-        void RenderLine(const Line<int>& line, const Color& color);
+        void RenderLine(const Line<int>& line, const Color& color) const;
 
         void RenderCircle(int centerX, int centerY, int radius, int red, int green, int blue) const;
         void RenderSquare(int x, int y, int h, int w, int red, int green, int blue, int opacity) const;

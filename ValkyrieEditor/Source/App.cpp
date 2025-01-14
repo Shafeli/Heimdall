@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include "Core/Core.h"
-#include "Primitives/Circle.h"
+#include "Circle.h"
 #include "SDLWindow/SDLWindowSystem.h"
 
 class EditorCoreSystem final : public Brokkr::CoreSystems
