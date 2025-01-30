@@ -15,8 +15,12 @@ files
 
 includedirs
 {
-    "Source",                   -- source directory
+    "Source", -- source directory
     "Source/Primitives",
+    "Source/Entity/GameEntity",
+    "Source/Entity/GameEntity/Component",
+    "Source/Entity/GameEntity/Component/TransformComponent",
+    "Source/Entity/GameEntity/Component/ColliderComponent",
     "../lib/SDL2/include",      -- SDL2 headers
     "../lib/SDL_image/include", -- SDL_image headers
     "../lib/SDL_mixer/include", -- SDL_mixer headers
@@ -29,10 +33,10 @@ includedirs
 
 libdirs
 {
-    "../lib/SDL2/lib/x64",      -- SDL2 libraries (e.g., SDL2.lib)
-    "../lib/SDL_image/lib/x64", -- SDL_image libraries (e.g., SDL2_image.lib)
-    "../lib/SDL_mixer/lib/x64", -- SDL_mixer libraries (e.g., SDL2_mixer.lib)
-    "../lib/SDL_ttf/lib/x64",   -- SDL_ttf libraries (e.g., SDL2_ttf.lib)
+    "../lib/SDL2/lib/x64",      -- SDL2 libraries
+    "../lib/SDL_image/lib/x64", -- SDL_image libraries
+    "../lib/SDL_mixer/lib/x64", -- SDL_mixer libraries
+    "../lib/SDL_ttf/lib/x64",   -- SDL_ttf libraries
     "$(SolutionDir)lib\\zlib\\contrib\\vstudio\\vc14\\x64\\ZlibStat$(Configuration)\\",
     "../lib/Vulkan/lib",        -- Local Vulkan libraries
     "../lib/Lua/lib"            -- Lua library directory
@@ -40,12 +44,12 @@ libdirs
 
 links
 {
-    "SDL2",       -- Link SDL2 (SDL2.lib)
-    "SDL2main",   -- Link SDL2main (SDL2main.lib)
-    "SDL2_image", -- Link SDL_image (SDL2_image.lib)
-    "SDL2_mixer", -- Link SDL_mixer (SDL2_mixer.lib)
-    "SDL2_ttf",   -- Link SDL_ttf (SDL2_ttf.lib)
-    "zlibstat",   -- Link zlib (zlib.lib)
+    "SDL2",       -- Link SDL2
+    "SDL2main",   -- Link SDL2main
+    "SDL2_image", -- Link SDL_image
+    "SDL2_mixer", -- Link SDL_mixer
+    "SDL2_ttf",   -- Link SDL_ttf
+    "zlibstat",   -- Link zlib
     "vulkan-1",   -- Vulkan runtime library
     "lua54"       -- Link to the Lua import library
 }

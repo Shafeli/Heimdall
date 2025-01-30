@@ -14,8 +14,8 @@ files
     "../lib/imgui/imstb_*.h",
     "../lib/imgui/backends/imgui_impl_sdl2.h",
     "../lib/imgui/backends/imgui_impl_sdl2.cpp",
-    "../lib/imgui/backends/imgui_impl_vulkan.h",  -- Optional: Only if Vulkan is used
-    "../lib/imgui/backends/imgui_impl_vulkan.cpp" -- Optional: Only if Vulkan is used
+    "../lib/imgui/backends/imgui_impl_vulkan.h",
+    "../lib/imgui/backends/imgui_impl_vulkan.cpp"
 }
 
 includedirs
@@ -23,6 +23,7 @@ includedirs
     "Source",
     "../BrokkrEngine/Source", -- Include BrokkrEngine
     "../BrokkrEngine/Source/Primitives",
+    "../BrokkrEngine/Source/Utility",
     "../lib/imgui",
     "../lib/imgui/backends",
     "../lib/SDL2/include",   -- Include SDL2 headers
@@ -39,8 +40,8 @@ libdirs
 links
 {
     "BrokkrEngine",
-    "SDL2",     -- Link SDL2 (SDL2.lib)
-    "SDL2main", -- Link SDL2main (SDL2main.lib)
+    "SDL2",     -- Link SDL2
+    "SDL2main", -- Link SDL2main
     "vulkan-1", -- Vulkan runtime library
 }
 

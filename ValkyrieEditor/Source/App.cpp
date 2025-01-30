@@ -1,12 +1,15 @@
 
 #include <iostream>
-#include "Core/Core.h"
 #include "Circle.h"
-#include "SDLWindow/SDLWindowSystem.h"
+#include "2DRendering/SDLWindowSystem.h"
+#include "AssetManager/AssetManager.h"
+#include "Core/Core.h"
 
 class EditorCoreSystem final : public Brokkr::CoreSystems
 {
-	Brokkr::SDLWindowSystem* m_sdlWindowManager = nullptr;
+	Brokkr::SDLWindowSystem* m_pSdlWindowManager = nullptr;
+	Brokkr::AssetManager* m_pAssetManager = nullptr;
+
 public:
 	virtual void Initialize() override
 	{
@@ -15,8 +18,8 @@ public:
 
 	void Build()
 	{
-		m_sdlWindowManager = AddCoreSystem<Brokkr::SDLWindowSystem>();
-		m_sdlWindowManager->AddWindow<Brokkr::SDLWindow>("EditorWindowMain", 1024, 768);
+		m_pSdlWindowManager = AddCoreSystem<Brokkr::SDLWindowSystem>();
+		m_pSdlWindowManager->AddWindow<Brokkr::SDLWindow>("EditorWindowMain", 1024, 768);
 	}
 
 	void Run()
@@ -38,7 +41,7 @@ public:
 void EditorCoreSystem::Destroy()
 {
 	CoreSystems::Destroy();
-	m_sdlWindowManager = nullptr;
+	m_pSdlWindowManager = nullptr;
 }
 
 int main()
