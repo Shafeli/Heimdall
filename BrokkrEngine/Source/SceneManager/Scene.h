@@ -22,8 +22,6 @@ namespace Brokkr
             :m_systemRef(pEngineSystems)
         {
             // What needs to be initialized
-            m_pEventManager = m_systemRef->GetCoreSystem<EventManager>();
-            m_pEntityManager = m_systemRef->GetCoreSystem<GameEntityManager>();
         }
 
         /////////////////////////////////////////////////
@@ -56,8 +54,6 @@ namespace Brokkr
     protected:
 
         // System handles for easy access to things that are commonly used
-        EventManager* m_pEventManager = nullptr;
-        GameEntityManager* m_pEntityManager = nullptr;
         CoreSystems* m_systemRef = nullptr;
 
     };
