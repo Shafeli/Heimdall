@@ -2,11 +2,11 @@
 
 #include <tinyxml2.h>
 
-#include "../../GameEntity.h"
-#include "../../../EventManager/EventManager.h"
-#include "../ColliderComponent/ColliderComponent.h"
-#include "AssetManager/XMLManager/Parsers/EntityXMLParser/EntityXMLParser.h"
+#include "ColliderComponent.h"
+#include "GameEntity.h"
 #include "Core/EngineDefinitions.h"
+#include "EventManager/EventManager.h"
+#include "XMLManager/Parsers/EntityXMLParser/EntityXMLParser.h"
 
 #define DEBUG_RENDER 0
 

@@ -4,7 +4,7 @@
 
 #include "GameEntity.h"
 #include "TransformComponent.h"
-#include "AssetManager/XMLManager/Parsers/EntityXMLParser/EntityXMLParser.h"
+#include "XMLManager/Parsers/EntityXMLParser/EntityXMLParser.h"
 #include "EventManager/Event/PayloadComponent/CollisionPayload/CollisionPayload.h"
 
 /*

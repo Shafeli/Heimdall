@@ -19,7 +19,7 @@ namespace Brokkr
 
     public:
         explicit Scene(CoreSystems* pEngineSystems)
-            :m_systemRef(pEngineSystems)
+            :m_pCoreSystems(pEngineSystems)
         {
             // What needs to be initialized
         }
@@ -54,7 +54,7 @@ namespace Brokkr
     protected:
 
         // System handles for easy access to things that are commonly used
-        CoreSystems* m_systemRef = nullptr;
+        CoreSystems* m_pCoreSystems = nullptr;
 
     };
 }

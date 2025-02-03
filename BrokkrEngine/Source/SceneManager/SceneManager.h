@@ -9,7 +9,8 @@
 
 namespace Brokkr
 {
-    // TODO: redo adding a state to fit the engine general design for type convertion adding templates
+    // TODO: SceneManager
+    // * Redo adding Scenes to temple-ted system
     class SceneManager final : public System
     {
         EventManager* m_pEventManager = nullptr;
@@ -33,8 +34,6 @@ namespace Brokkr
         }
 
         virtual ~SceneManager() override;
-
-        //TODO: move these voids to bool and return is was successful or not 
         void AddState(const std::string& stateIdentifier, std::unique_ptr<Scene> newState);
         void RemoveState(const std::string& stateIdentifier);
         void SetActiveState(const std::string& stateIdentifier);
@@ -42,8 +41,9 @@ namespace Brokkr
 
         virtual void Destroy() override;
         [[nodiscard]] Scene* GetActiveState();
+
     protected: // Only calls these two in core main game loop
-        friend class EngineApplicationCore;
+        friend class CoreSystems;
         void ProcessStateChange();
         //[[nodiscard]] Scene* GetActiveState();
     };

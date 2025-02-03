@@ -4,8 +4,8 @@
 #include <GameEntity.h>
 #include <TransformComponent.h>
 #include "AssetManager/AssetManager.h"
-#include "AssetManager/XMLManager/Parsers/EntityXMLParser/EntityXMLParser.h"
-#include "AssetManager/XMLManager/Parsers/PositionDataParser/PositionDataParser.h"
+#include "XMLManager/Parsers/EntityXMLParser/EntityXMLParser.h"
+#include "XMLManager/Parsers/PositionDataParser/PositionDataParser.h"
 
 
 namespace Brokkr

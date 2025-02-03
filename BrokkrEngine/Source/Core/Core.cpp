@@ -9,6 +9,8 @@
 #include <SDL_ttf.h>
 #include <SDL_events.h>
 
+#include "SceneManager/SceneManager.h"
+
 namespace Core
 {
 	void PrintHelloWorld()
@@ -18,7 +20,7 @@ namespace Core
 
 }
 
-void Brokkr::CoreSystems::UpdateDelta()
+void Brokkr::CoreSystems::Update()
 {
     SDL_Event windowEvent;
     ++frameCount;
@@ -51,6 +53,8 @@ void Brokkr::CoreSystems::UpdateDelta()
         frameTimeMS -= 1000.0;
     }
 
+    if (m_SceneManagerSystem)
+        m_pSceneManger->ProcessStateChange();
 }
 
 void Brokkr::CoreSystems::Initialize()
@@ -92,6 +96,11 @@ void Brokkr::CoreSystems::Initialize()
     else
     {
         m_TTF_Systems = true;
+    }
+
+    if (IsSystemAvailable<Brokkr::SceneManager>())
+    {
+        m_pSceneManger = GetCoreSystem<SceneManager>();
     }
 }
 

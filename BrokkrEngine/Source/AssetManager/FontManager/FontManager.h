@@ -11,7 +11,7 @@ struct _TTF_Font;
 namespace Brokkr
 {
     class WindowHandle;
-    class Texture;
+    class Texture2D;
     class SDLRenderer;
 
     class FontManager final : public AssetSubsystem

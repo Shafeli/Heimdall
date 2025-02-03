@@ -14,7 +14,7 @@ namespace tinyxml2
 namespace Brokkr
 {
     class EntityXMLParser;
-    class Texture;
+    class Texture2D;
     class GameEntity;
 
     class SpriteComponent final : public Component
@@ -29,7 +29,7 @@ namespace Brokkr
         EventManager* m_pEventManager = nullptr;
         AssetManager* m_pAssetManager = nullptr;
 
-        Texture* m_texture = nullptr;
+        Texture2D* m_texture = nullptr;
 
         float m_depth;
         bool m_active;

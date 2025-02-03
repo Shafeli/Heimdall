@@ -1,21 +1,21 @@
-#include "TextureManager.h"
+#include "TextureManager2D.h"
 
 #include <SDL_image.h>
 
 #include "2DRendering/SDLWindow.h"
-#include "Texture/Texture.h"
+#include "2DTexture/Texture2D.h"
 
-Brokkr::TextureManager::TextureManager(AssetManager* assetManager)
+Brokkr::TextureManager2D::TextureManager2D(AssetManager* assetManager)
     : AssetSubsystem(assetManager)
 {
 }
 
-Brokkr::TextureManager::~TextureManager()
+Brokkr::TextureManager2D::~TextureManager2D()
 {
     Destroy();
 }
 
-void Brokkr::TextureManager::Destroy()
+void Brokkr::TextureManager2D::Destroy()
 {
     for (const auto& [key, pTexture] : m_pImageTexture)
     {
@@ -27,7 +27,7 @@ void Brokkr::TextureManager::Destroy()
     }
 }
 
-void Brokkr::TextureManager::Unload(const std::string& textureName)
+void Brokkr::TextureManager2D::Unload(const std::string& textureName)
 {
     if (IsLoaded(textureName))
     {
@@ -42,7 +42,7 @@ void Brokkr::TextureManager::Unload(const std::string& textureName)
     }
 }
 
-bool Brokkr::TextureManager::IsLoaded(const std::string& textureName) const
+bool Brokkr::TextureManager2D::IsLoaded(const std::string& textureName) const
 {
     //Runs over map
     for (const auto& [key, pTexture] : m_pImageTexture)
@@ -56,21 +56,21 @@ bool Brokkr::TextureManager::IsLoaded(const std::string& textureName) const
     return false;//No error
 }
 
-Brokkr::Texture* Brokkr::TextureManager::GetTexture(const std::string& textureName)
+Brokkr::Texture2D* Brokkr::TextureManager2D::GetTexture(const std::string& textureName)
 {
     return m_pImageTexture[textureName];
 }
 
-void Brokkr::TextureManager::LoadTexture(const std::string& textureName, const char* fileName)
+void Brokkr::TextureManager2D::LoadTexture(const std::string& textureName, const char* fileName)
 {
     if (!IsLoaded(textureName))    // If texture is not already loaded
     {
         std::string basicString = fileName;
-        m_pImageTexture[textureName] = new Texture(basicString, m_pRenderer);    // Add texture to map
+        m_pImageTexture[textureName] = new Texture2D(basicString, m_pRenderer);    // Add texture to map
     }
 }
 
-void Brokkr::TextureManager::Init(SDLWindow* window, SDLRenderer* render)
+void Brokkr::TextureManager2D::Init(SDLWindow* window, SDLRenderer* render)
 {
     m_pWindow = window;
     m_pRenderer = render;
@@ -87,7 +87,7 @@ void Brokkr::TextureManager::Init(SDLWindow* window, SDLRenderer* render)
     }
 }
 
-SDL_Texture* Brokkr::TextureManager::GetTexture(const std::string& textureName) const
+SDL_Texture* Brokkr::TextureManager2D::GetTexture(const std::string& textureName) const
 {
     return this->m_pImageTexture.at(textureName)->LoadTexture();
 }

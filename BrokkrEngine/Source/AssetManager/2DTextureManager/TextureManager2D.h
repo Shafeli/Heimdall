@@ -10,18 +10,18 @@ namespace Brokkr
 {
     class SDLWindow;
     class SDLRenderer;
-    class Texture;
+    class Texture2D;
 
-    class TextureManager final : public AssetSubsystem
+    class TextureManager2D final : public AssetSubsystem
     {
         SDLRenderer* m_pRenderer = nullptr;
         SDLWindow* m_pWindow = nullptr;
 
-        std::unordered_map<std::string, Texture*> m_pImageTexture;
+        std::unordered_map<std::string, Texture2D*> m_pImageTexture;
 
     public:
-        TextureManager(AssetManager* assetManager);
-        virtual ~TextureManager() override;
+        TextureManager2D(AssetManager* assetManager);
+        virtual ~TextureManager2D() override;
 
         virtual void Destroy() override;
 
@@ -31,7 +31,7 @@ namespace Brokkr
 
         [[nodiscard]] bool IsLoaded(const std::string& textureName) const;
 
-        Texture* GetTexture(const std::string& textureName);
+        Texture2D* GetTexture(const std::string& textureName);
 
     protected:
         friend class CoreSystems;

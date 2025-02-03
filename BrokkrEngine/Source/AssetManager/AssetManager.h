@@ -12,6 +12,8 @@
 
 namespace Brokkr
 {
+    class SDLWindow;
+    class SDLRenderer;
     class AssetManager;
 
     class AssetSubsystem
@@ -41,7 +43,7 @@ namespace Brokkr
             //
         }
 
-        void Init();
+        void Init(SDLWindow* window, SDLRenderer* renderer);
 
         template <typename AssetSystem>
         AssetSystem* GetAssetSystem()

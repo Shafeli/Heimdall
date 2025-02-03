@@ -5,14 +5,14 @@
 #include "ArchiveManager/ArchiveManager.h"
 #include "AudioManager/AudioManager.h"
 #include "FontManager/FontManager.h"
-#include "TextureManager/TextureManager.h"
-#include "XMLManager/XMLManager.h"
+#include "2DTextureManager/TextureManager2D.h"
 
-void Brokkr::AssetManager::Init()
+
+void Brokkr::AssetManager::Init(SDLWindow* window, SDLRenderer* renderer)
 {
 
-    const auto pWindow = m_pCoreManager->GetCoreSystem<SDLWindow>();
-    const auto pRender = m_pCoreManager->GetCoreSystem<SDLRenderer>();
+    const auto pWindow = window;
+    const auto pRender = renderer;
 
     const auto pArchiveManager = AddAssetSystem<ArchiveManager>();
     if (!pArchiveManager)
@@ -20,16 +20,10 @@ void Brokkr::AssetManager::Init()
         const std::string error = "Error Asset System Failed : ArchiveManager did not Construct!";
     }
 
-    const auto pTextureManager = AddAssetSystem<TextureManager>();
+    const auto pTextureManager = AddAssetSystem<TextureManager2D>();
     if (!pTextureManager)
     {
-        const std::string error = "Error Asset System Failed : TextureManager did not Construct!";
-    }
-
-    const auto pXMLManager = AddAssetSystem<XMLManager>();
-    if (!pXMLManager)
-    {
-        const std::string error = "Error Asset System Failed : XMLManager did not Construct!";
+        const std::string error = "Error Asset System Failed : TextureManager2D did not Construct!";
     }
 
     const auto pFontManager = AddAssetSystem<FontManager>();
@@ -45,7 +39,6 @@ void Brokkr::AssetManager::Init()
     }
 
     pTextureManager->Init(pWindow, pRender);
-    pXMLManager->Init(m_pCoreManager);
     pFontManager->Init(pRender);
 }
 

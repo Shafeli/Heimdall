@@ -1,10 +1,8 @@
 #pragma once
-#include <chrono>
-#include <string>
 
+#include <string>
 #include "Vector2.h"
 #include "Color/Color.h"
-
 
 //TODO: Add decompressed binary to Texture support
 
@@ -14,7 +12,7 @@ namespace Brokkr
 {
     class SDLRenderer;
 
-    class Texture
+    class Texture2D
     {
 
         Vector2<int> m_size;
@@ -24,16 +22,13 @@ namespace Brokkr
 
     public:
 
-        Texture(const std::string& texturePath, SDLRenderer* pRenderer);
-        Texture(const void* pData, size_t size, SDLRenderer* pRenderer);
-        ~Texture();
+        Texture2D(const std::string& texturePath, SDLRenderer* pRenderer);
+        Texture2D(const void* pData, size_t size, SDLRenderer* pRenderer);
+        ~Texture2D();
 
         // Function to change the color of a texture
         void SetTextureColor(Color newModColor) const;
-
         void ResetTextureColor() const;
-
-
         [[nodiscard]] Vector2<int> GetSize() const { return m_size; }
 
         SDL_Texture* LoadTexture();

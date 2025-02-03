@@ -2,7 +2,8 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
-#include "../../AssetManager/AssetManager.h"
+#include <Core/Core.h>
+
 
 namespace tinyxml2
 {
@@ -11,7 +12,6 @@ namespace tinyxml2
 
 namespace Brokkr
 {
-    class CoreSystems;
 
     class XMLParser 
     {
@@ -28,17 +28,19 @@ namespace Brokkr
         CoreSystems* m_pCoreSystems = nullptr;
     };
 
-    class XMLManager final : public AssetSubsystem
+    class XMLManager final : public System
     {
-        
-        CoreSystems* m_pCoreSystems = nullptr;
         std::vector<std::unique_ptr<XMLParser>> m_parsers;
         std::unordered_map<std::string, const char*> m_xmlPaths;
 
     public:
+        XMLManager(CoreSystems* pCoreManager)
+            : System(pCoreManager)
+        {
+            //
+        }
 
-        explicit XMLManager(AssetManager* assetManager) : AssetSubsystem(assetManager) {}
-        void Init(CoreSystems* coreSystems);
+        void Init();
         void Load(const char* filePath);
         const char* Get(const std::string& fileName);
 

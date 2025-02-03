@@ -7,12 +7,10 @@
 #include "Parsers/PositionDataParser/PositionDataParser.h"
 
 
-void Brokkr::XMLManager::Init(CoreSystems* coreSystems)
+void Brokkr::XMLManager::Init()
 {
-    m_pCoreSystems = coreSystems;
-    
-    AddParser<EntityXMLParser>(coreSystems); // adding the Entity parser
-    AddParser<PositionDataParser>(coreSystems); // adding the Entity parser 
+    AddParser<EntityXMLParser>(m_pCoreManager); // adding the Entity parser
+    AddParser<PositionDataParser>(m_pCoreManager); // adding the Entity parser 
 }
 
 void Brokkr::XMLManager::Load(const char* filePath)
@@ -68,7 +66,6 @@ bool Brokkr::XMLManager::Parse(const char* fileName) const
 
 void Brokkr::XMLManager::Destroy()
 {
-    m_pCoreSystems = nullptr;
     m_parsers.clear();
 }
 

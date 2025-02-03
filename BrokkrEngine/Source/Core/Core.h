@@ -10,6 +10,7 @@ namespace Core { void PrintHelloWorld(); }
 
 namespace Brokkr
 {
+    class SceneManager;
     class CoreSystems;
 
     class System : public DeleteRuleOfFive
@@ -35,6 +36,10 @@ namespace Brokkr
         bool m_IMG_Systems = false;
         bool m_Mix_Systems = false;
         bool m_TTF_Systems = false;
+        bool m_SceneManagerSystem = false;
+
+        SceneManager* m_pSceneManger = nullptr;
+
         int frameCount = 0;
         std::vector<std::unique_ptr<System>> m_pCoreSubsystems;
 
@@ -47,7 +52,7 @@ namespace Brokkr
         bool isRunning = true;
 
     public:
-        void UpdateDelta();
+        void Update();
 
         virtual ~CoreSystems() override = default;
         virtual void Initialize();

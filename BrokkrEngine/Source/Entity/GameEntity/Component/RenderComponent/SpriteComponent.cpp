@@ -3,16 +3,16 @@
 #include <tinyxml2.h>
 
 #include "../../GameEntity.h"
-#include "../../../AssetManager/TextureManager/TextureManager.h"
-#include "../TransformComponent/TransformComponent.h"
-#include "AssetManager/TextureManager/Texture/Texture.h"
-#include "AssetManager/XMLManager/Parsers/EntityXMLParser/EntityXMLParser.h"
+#include "AssetManager/2DTextureManager/TextureManager2D.h"
+#include "TransformComponent.h"
+#include "AssetManager/2DTextureManager/2DTexture/Texture2D.h"
+#include "XMLManager/Parsers/EntityXMLParser/EntityXMLParser.h"
 
 #define DEBUG_LOGGING 0
 
 namespace Brokkr
 {
-    class TextureManager;
+    class TextureManager2D;
     class ColorComponent;
 }
 
@@ -44,7 +44,7 @@ bool Brokkr::SpriteComponent::Init()
     m_pAssetManager = m_systemRef->GetCoreSystem<AssetManager>();
     m_pEventManager = m_systemRef->GetCoreSystem<EventManager>();
 
-    m_texture = m_pAssetManager->GetAssetSystem<TextureManager>()->GetTexture(m_textureName);
+    m_texture = m_pAssetManager->GetAssetSystem<TextureManager2D>()->GetTexture(m_textureName);
 
     if (m_textureBlendColor.empty())
         return true;

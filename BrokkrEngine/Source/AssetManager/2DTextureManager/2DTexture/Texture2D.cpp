@@ -1,16 +1,16 @@
-#include "Texture.h"
+#include "Texture2D.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include "2DRendering/SDLRenderer.h"
 
-Brokkr::Texture::Texture(const std::string& texturePath, SDLRenderer* pRenderer)
+Brokkr::Texture2D::Texture2D(const std::string& texturePath, SDLRenderer* pRenderer)
     :m_texturePath(texturePath)
     ,m_pRenderer(pRenderer)
 {
     LoadTexture();
 }
 
-Brokkr::Texture::Texture(const void* pData, size_t size, SDLRenderer* pRenderer)
+Brokkr::Texture2D::Texture2D(const void* pData, size_t size, SDLRenderer* pRenderer)
     :m_texturePath("BinaryBuilt" + size)
     ,m_pRenderer(pRenderer)
 {
@@ -30,12 +30,12 @@ Brokkr::Texture::Texture(const void* pData, size_t size, SDLRenderer* pRenderer)
     SDL_RWclose(pRWops);
 }
 
-Brokkr::Texture::~Texture()
+Brokkr::Texture2D::~Texture2D()
 {
     DestroyTexture();
 }
 
-void Brokkr::Texture::SetTextureColor(Color newModColor) const
+void Brokkr::Texture2D::SetTextureColor(Color newModColor) const
 {
     auto newColor = newModColor.GetSdlColor();
 
@@ -43,13 +43,13 @@ void Brokkr::Texture::SetTextureColor(Color newModColor) const
     SDL_SetTextureColorMod(m_pTexture, newColor->r, newColor->g, newColor->b);
 }
 
-void Brokkr::Texture::ResetTextureColor() const
+void Brokkr::Texture2D::ResetTextureColor() const
 {
     // Reset the texture color
     SDL_SetTextureColorMod(m_pTexture, 255, 255, 255);
 }
 
-SDL_Texture* Brokkr::Texture::LoadTexture()
+SDL_Texture* Brokkr::Texture2D::LoadTexture()
 {
     if (m_pTexture)
         return m_pTexture;
@@ -84,7 +84,7 @@ SDL_Texture* Brokkr::Texture::LoadTexture()
     return m_pTexture;
 }
 
-bool Brokkr::Texture::DestroyTexture()
+bool Brokkr::Texture2D::DestroyTexture()
 {
     if (m_pTexture != nullptr)
     {
