@@ -15,7 +15,6 @@ namespace tinyxml2
 namespace Brokkr
 {
     class EntityXMLParser;
-    class RenderPipeline;
     class PhysicsManager;
     class Collider;
     class TransformComponent;

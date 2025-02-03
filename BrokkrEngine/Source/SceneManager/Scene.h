@@ -11,15 +11,11 @@
 namespace Brokkr
 {
     class ScriptSystemManager;
-    class RenderPipeline;
-    class LuaSystem;
-    class WorldTileManager;
     class CoreSystems;
     class GameEntityManager;
 
     class Scene
     {
-        RenderPipeline* m_pRenderPipeline = nullptr;
 
     public:
         explicit Scene(CoreSystems* pEngineSystems)
@@ -62,7 +58,6 @@ namespace Brokkr
         // System handles for easy access to things that are commonly used
         EventManager* m_pEventManager = nullptr;
         GameEntityManager* m_pEntityManager = nullptr;
-        WorldTileManager* m_pWorldTileManager = nullptr;
         CoreSystems* m_systemRef = nullptr;
 
     };

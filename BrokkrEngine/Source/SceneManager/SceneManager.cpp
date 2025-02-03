@@ -57,7 +57,6 @@ void Brokkr::SceneManager::SetActiveState(const std::string& stateIdentifier)
     if (stateIdentifier == m_pActiveStateKey)
     {
         const std::string error = "Active state set to current active state key: " + stateIdentifier;
-        m_logger.Log(Logger::LogLevel::kError, error);
         assert(false); // assertion fail
         return;
     }
@@ -67,7 +66,6 @@ void Brokkr::SceneManager::SetActiveState(const std::string& stateIdentifier)
     if (stateIterator == m_states.end()) 
     {
         const std::string error = "Missing state key: " + stateIdentifier + " is unknown";
-        m_logger.Log(Logger::LogLevel::kError, error);
         assert(false); // assertion fail
     }
 
@@ -91,7 +89,6 @@ void Brokkr::SceneManager::ResetState(const std::string& stateIdentifier)
     if (stateIterator == m_states.end())
     {
         const std::string error = "State key: " + stateIdentifier + " does not exist";
-        m_logger.Log(Logger::LogLevel::kError, error);
         assert(false); // assertion fail
     }
 
@@ -133,7 +130,6 @@ Brokkr::Scene* Brokkr::SceneManager::GetActiveState()
     if (m_pActiveState == nullptr)
     {
         const std::string error = "Active State Is Null";
-        m_logger.Log(Logger::LogLevel::kError, error);
     }
     return m_pActiveState;
 }

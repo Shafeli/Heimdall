@@ -127,7 +127,7 @@ namespace Brokkr
         std::string m_eventString;
         Event m_event;
 
-        // TODO: sense moving trees to id only the colliders can now be in a vector and use cache better
+        // TODO: sense moving trees to id only the colliders can now be in a vector
         std::list<std::unique_ptr<Collider>> m_dynamicRects;
         std::list<std::unique_ptr<Collider>> m_staticRects;
 

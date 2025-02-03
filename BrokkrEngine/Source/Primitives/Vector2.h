@@ -3,7 +3,7 @@
 #include <random>
 #include <sstream>
 #include <vector>
-#define PI    3.14159265358979323846264338327950288   /**< pi */
+#include "Core/EngineDefinitions.h"
 
 namespace Brokkr
 {

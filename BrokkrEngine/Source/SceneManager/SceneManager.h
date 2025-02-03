@@ -6,15 +6,12 @@
 
 #include "BrokkrDefaultScene.h"
 #include "Scene.h"
-#include "../Logging/Logger.h"
 
 namespace Brokkr
 {
     // TODO: redo adding a state to fit the engine general design for type convertion adding templates
     class SceneManager final : public System
     {
-        Logger m_logger;
-
         EventManager* m_pEventManager = nullptr;
 
         std::unordered_map<std::string, std::unique_ptr<Scene>> m_states;
@@ -27,7 +24,6 @@ namespace Brokkr
     public:
         explicit SceneManager(CoreSystems* pCoreManager)
             : System(pCoreManager)
-            , m_logger("SceneManagerLog")
         {
             //
             m_pEventManager = pCoreManager->GetCoreSystem<EventManager>();

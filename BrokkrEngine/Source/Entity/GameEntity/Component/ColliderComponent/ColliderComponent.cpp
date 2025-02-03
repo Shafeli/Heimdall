@@ -86,9 +86,9 @@ void Brokkr::ColliderComponent::Render()
     Component::Render();
 
 #if DEBUG_RENDER
-    auto colorHax = BasicColor();
-    colorHax.RandomColors();
-    m_pRenderPipeline->QueueToRender(GetTransform(), colorHax, 0.0f);
+    //auto colorHax = BasicColor();
+    //colorHax.RandomColors();
+    //m_pRenderPipeline->QueueToRender(GetTransform(), colorHax, 0.0f);
 #endif
 
 }
