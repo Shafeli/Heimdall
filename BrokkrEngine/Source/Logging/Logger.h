@@ -44,8 +44,10 @@ namespace Brokkr
         ~Logger();
 
         void Log(LogLevel level, const std::string& message);
-        void CloseFile();
 
+
+    private:
+        void CloseFile();
     };
 
 }

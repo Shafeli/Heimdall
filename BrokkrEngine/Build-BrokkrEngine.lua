@@ -16,6 +16,8 @@ files
 includedirs
 {
     "Source", -- source directory
+    "Source/UnitTests",
+    "Source/Core",
     "Source/Primitives",
     "Source/Entity/GameEntity",
     "Source/Entity/GameEntity/Component",

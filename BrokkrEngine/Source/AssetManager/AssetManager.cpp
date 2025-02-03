@@ -8,11 +8,11 @@
 #include "2DTextureManager/TextureManager2D.h"
 
 
-void Brokkr::AssetManager::Init(SDLWindow* window, SDLRenderer* renderer)
+void Brokkr::AssetManager::Init()
 {
 
-    const auto pWindow = window;
-    const auto pRender = renderer;
+    const auto pWindow = m_pSdlWindow;
+    const auto pRender = m_pSdlRenderer;
 
     const auto pArchiveManager = AddAssetSystem<ArchiveManager>();
     if (!pArchiveManager)

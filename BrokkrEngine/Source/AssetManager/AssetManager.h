@@ -34,16 +34,21 @@ namespace Brokkr
     class AssetManager final : public System
     {
         // inline static Logger m_fileLog{ "AssetSystemManagerLog" };
+        SDLRenderer* m_pSdlRenderer = nullptr;
+        SDLWindow* m_pSdlWindow = nullptr;
+
         std::vector<std::unique_ptr<AssetSubsystem>> m_pAssetSystems{ };
 
     public:
-        explicit AssetManager(CoreSystems* pCoreManager)
+        explicit AssetManager(CoreSystems* pCoreManager, SDLRenderer* pSdlRenderer, SDLWindow* pSdlWindow)
             : System(pCoreManager)
+            , m_pSdlRenderer(pSdlRenderer)
+            , m_pSdlWindow(pSdlWindow)
         {
             //
         }
 
-        void Init(SDLWindow* window, SDLRenderer* renderer);
+        void Init();
 
         template <typename AssetSystem>
         AssetSystem* GetAssetSystem()
