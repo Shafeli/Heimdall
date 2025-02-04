@@ -25,15 +25,18 @@ namespace Brokkr
         Vector2<TypeName> operator+(const Vector2<TypeName>& other) const { return Vector2<TypeName>(x + other.x, y + other.y); }
         Vector2<TypeName> operator-(const Vector2<TypeName>& other) const { return Vector2<TypeName>(x - other.x, y - other.y); }
         Vector2<TypeName> operator*(TypeName scalar) const { return Vector2<TypeName>(x * scalar, y * scalar); }
-        Vector2<TypeName> operator*(const TypeName matrix[2][2]) const {
+        Vector2<TypeName> operator*(const TypeName matrix[2][2]) const
+        {
             return ApplyRotationMatrix(matrix);
         }
 
-        Vector2<TypeName> operator/(TypeName scalar) const {
+        Vector2<TypeName> operator/(TypeName scalar) const
+        {
             assert(scalar != TypeName(0)); // division by zero
             return Vector2<TypeName>(x / scalar, y / scalar);
         }
-        Vector2<TypeName>& operator/=(TypeName scalar) {
+        Vector2<TypeName>& operator/=(TypeName scalar)
+        {
             assert(scalar != TypeName(0));
             x /= scalar;
             y /= scalar;
@@ -113,7 +116,8 @@ namespace Brokkr
             const TypeName dot = Dot(other);
             const TypeName l1 = Length();
             const TypeName l2 = other.Length();
-            if (l1 > kEPSILON && l2 > kEPSILON) {
+            if (l1 > kEPSILON && l2 > kEPSILON) 
+            {
                 return std::acos(dot / (l1 * l2));
             }
             return TypeName(0);
@@ -135,11 +139,13 @@ namespace Brokkr
         {
             Vector2<TypeName> projection = ProjectOnto(other);
             TypeName length = projection.Length();
-            if (length < minLength) {
+            if (length < minLength) 
+            {
                 projection.Normalize();
                 projection *= minLength;
             }
-            else if (length > maxLength) {
+            else if (length > maxLength) 
+            {
                 projection.Normalize();
                 projection *= maxLength;
             }
@@ -243,7 +249,8 @@ namespace Brokkr
         }
 
         // apply both rotation and translation
-        Vector2<TypeName> Transform(const Vector2<TypeName>& translation, TypeName angleRadians) const {
+        Vector2<TypeName> Transform(const Vector2<TypeName>& translation, TypeName angleRadians) const
+        {
             return Rotate(angleRadians) + translation;
         }
 

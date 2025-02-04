@@ -1,11 +1,12 @@
 
 #include <iostream>
+#include <Core/Core.h>
 #include <SceneManager/SceneManager.h>
 #include <UnitTests/UnitTestSystem.h>
 #include "Circle.h"
 #include "2DRendering/SDLWindowSystem.h"
 #include "AssetManager/AssetManager.h"
-#include <Core/Core.h>
+#include "UnitTests/UnitTest.h"
 
 class EditorCoreSystem final : public Brokkr::CoreSystems
 {
@@ -15,12 +16,6 @@ class EditorCoreSystem final : public Brokkr::CoreSystems
 	Brokkr::UnitTestSystem* m_pUnitTestSystem = nullptr;
 
 public:
-	virtual void Initialize() override
-	{
-		CoreSystems::Initialize();
-
-		m_pSdlWindowManager->AddWindow<Brokkr::SDLWindow>("EditorWindowMain", 1024, 768);
-	}
 
 	void Build()
 	{
@@ -34,6 +29,19 @@ public:
 
 		m_pUnitTestSystem = AddCoreSystem<Brokkr::UnitTestSystem>();
 
+	}
+
+	virtual void Initialize() override
+	{
+		CoreSystems::Initialize();
+
+
+		Brokkr::UnitTest::RegisterEngineTests(m_pUnitTestSystem);
+	}
+
+	void RunTests()
+	{
+		m_pUnitTestSystem->RunTests();
 	}
 
 	void Run()
@@ -66,6 +74,7 @@ int main()
 
 	Editor.Build();
 	Editor.Initialize();
+	Editor.RunTests();
 	Editor.Run();
 	Editor.Destroy();
 

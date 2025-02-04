@@ -8,7 +8,6 @@
 
 #include <Core/Core.h>
 
-
 namespace Brokkr
 {
     using TestFunction = std::function<bool()>;
@@ -19,7 +18,7 @@ namespace Brokkr
         TestFunction function;
     };
 
-    class UnitTestSystem : public Brokkr::System
+    class UnitTestSystem final : public Brokkr::System
     {
         std::vector<TestCase> m_tests;
 
@@ -57,6 +56,7 @@ namespace Brokkr
                     failed++;
                 }
             }
+
             ///////////////////////////////////////////////////////////////////////
             // Summary Output
             std::cout << "\n===== Test Summary =====\n";
@@ -82,5 +82,7 @@ namespace Brokkr
             std::cout << "=========================\n";
             /////////////////////////////////////////////////////////////////////////
         }
+
+        virtual void Destroy() override;
     };
 }

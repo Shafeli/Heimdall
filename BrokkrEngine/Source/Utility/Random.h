@@ -30,7 +30,6 @@ public:
 // cumulative probability functions - CDF
 // https://hackingcpp.com/cpp/std/random.html - Random Distributions
 
-//TODO : Test More 
 template<typename TypeName>
 TypeName XORShift(TypeName x, TypeName y, TypeName z, TypeName w)
 {
