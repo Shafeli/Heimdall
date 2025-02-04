@@ -20,6 +20,7 @@ public:
 	void Build()
 	{
 		m_pSceneManager = AddCoreSystem<Brokkr::SceneManager>();
+		
 		m_pSdlWindowManager = AddCoreSystem<Brokkr::SDLWindowSystem>();
 
 		auto pMainWindow = m_pSdlWindowManager->AddWindow<Brokkr::SDLWindow>("EditorWindowMain", 1024, 768);

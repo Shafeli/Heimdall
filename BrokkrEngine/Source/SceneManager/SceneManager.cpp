@@ -123,6 +123,10 @@ void Brokkr::SceneManager::ProcessStateChange()
             m_isReplacing = false;
         }
     }
+    else 
+    {
+        m_pActiveState->Update();
+    }
 }
 
 Brokkr::Scene* Brokkr::SceneManager::GetActiveState()
