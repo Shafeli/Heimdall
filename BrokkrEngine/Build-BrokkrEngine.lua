@@ -11,6 +11,7 @@ files
     "Source/**.cpp",
     "lib/TinyXML/**.h",
     "lib/TinyXML/**.cpp",
+    "lib/GAP311/**.hpp",
 }
 
 includedirs
@@ -30,7 +31,9 @@ includedirs
     "../lib/zlib",              -- zlib headers
     "../lib/Vulkan/Include",    -- Local Vulkan headers
     "../lib/TinyXML",           -- Local TinyXML headers
-    "../lib/Lua/include"        -- Include Lua headers
+    "../lib/Lua/include",       -- Include Lua headers
+    "../lib/GAP311",
+    "../lib/vk-bootstrap/src"
 }
 
 libdirs

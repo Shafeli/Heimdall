@@ -20,6 +20,7 @@ namespace Brokkr
         //static constexpr double PI = 3.141592653589793;
         static constexpr double DEG_TO_RAD = PI / 180.0;
         static constexpr double RAD_TO_DEG = 180.0 / PI;
+
     };
 
     struct EngineLimits

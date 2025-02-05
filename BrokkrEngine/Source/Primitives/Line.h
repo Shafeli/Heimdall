@@ -81,8 +81,6 @@ namespace Brokkr
 
             return false;
         }
-
-        // TODO: Intersects methods for Circle, Rectangle, and Triangle
     };
 }
 

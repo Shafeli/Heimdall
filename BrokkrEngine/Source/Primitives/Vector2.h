@@ -35,6 +35,7 @@ namespace Brokkr
             assert(scalar != TypeName(0)); // division by zero
             return Vector2<TypeName>(x / scalar, y / scalar);
         }
+
         Vector2<TypeName>& operator/=(TypeName scalar)
         {
             assert(scalar != TypeName(0));
@@ -118,7 +119,7 @@ namespace Brokkr
             const TypeName l2 = other.Length();
             if (l1 > kEPSILON && l2 > kEPSILON) 
             {
-                return std::acos(dot / (l1 * l2));
+                return std::acos(dot / (l1 * l2)); // inverse cosine
             }
             return TypeName(0);
         }
