@@ -5,9 +5,10 @@
 #include "Core/Core.h"
 
 /////////////////////////////////////////////////
-//          AssetManger
-//  TODO: Docs
+//  TODO: AssetManager
 //  
+//  * Docs
+//  * Intake asset folder path in c'tor
 /////////////////////////////////////////////////
 
 namespace Brokkr
