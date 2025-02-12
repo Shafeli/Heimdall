@@ -299,8 +299,7 @@ namespace Brokkr
         /*
         What is Manhattan Distance?
         Manhattan distance measures the total distance between two points when only
-        horizontal and vertical movements are allowed. It's named after the
-        Manhattan borough of New York City sense it has a grid-like street layout.
+        horizontal and vertical movements are allowed.
         */
         [[nodiscard]] TypeName ManhattanDistance(const Vector2<TypeName>& other) const
         {
