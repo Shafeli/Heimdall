@@ -265,9 +265,6 @@ namespace Brokkr
             }
         }
 
-        // return "swizzled" or swapped x and y versions of the vector
-        [[nodiscard]] Vector2<TypeName> YX() const { return Vector2<TypeName>(y, x); }
-
         // Generate a random Vector2 with in range
         static Vector2<TypeName> Random(TypeName minX, TypeName maxX, TypeName minY, TypeName maxY)
         {
