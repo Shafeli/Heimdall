@@ -2,7 +2,7 @@
 .vs/
 Binaries/
 lib/Vulkan/
-# lib/vk-bootstrap
+lib/vk-bootstrap
 
 # Files
 *.vcxproj
