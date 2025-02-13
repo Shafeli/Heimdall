@@ -19,35 +19,35 @@ namespace Brokkr
             : m_size(size), m_position(position)
         {}
 
-        [[nodiscard]] TypeName GetHeight() const { return m_size.y; }
-        [[nodiscard]] TypeName GetWidth() const { return m_size.x; }
-        [[nodiscard]] TypeName GetX() const { return m_position.x; }
-        [[nodiscard]] TypeName GetY() const { return m_position.y; }
+        [[nodiscard]] TypeName GetHeight() const { return m_size.m_y; }
+        [[nodiscard]] TypeName GetWidth() const { return m_size.m_x; }
+        [[nodiscard]] TypeName GetX() const { return m_position.m_x; }
+        [[nodiscard]] TypeName GetY() const { return m_position.m_y; }
 
-        void SetHeight(TypeName y) { m_size.y = y; }
-        void SetWidth(TypeName x) { m_size.x = x; }
-        void SetX(TypeName x) { m_position.x = x; }
-        void SetY(TypeName y) { m_position.y = y; }
+        void SetHeight(TypeName y) { m_size.m_y = y; }
+        void SetWidth(TypeName x) { m_size.m_x = x; }
+        void SetX(TypeName x) { m_position.m_x = x; }
+        void SetY(TypeName y) { m_position.m_y = y; }
 
-        void AdjustHeight(TypeName y) { m_size.y += y; }
-        void AdjustWidth(TypeName x) { m_size.x += x; }
-        void AdjustX(TypeName x) { m_position.x += x; }
-        void AdjustY(TypeName y) { m_position.y += y; }
+        void AdjustHeight(TypeName y) { m_size.m_y += y; }
+        void AdjustWidth(TypeName x) { m_size.m_x += x; }
+        void AdjustX(TypeName x) { m_position.m_x += x; }
+        void AdjustY(TypeName y) { m_position.m_y += y; }
 
-        [[nodiscard]] TypeName GetTop() const { return m_position.y; }
-        [[nodiscard]] TypeName GetBottom() const { return m_position.y + m_size.y; }
-        [[nodiscard]] TypeName GetLeft() const { return m_position.x; }
-        [[nodiscard]] TypeName GetRight() const { return m_position.x + m_size.x; }
+        [[nodiscard]] TypeName GetTop() const { return m_position.m_y; }
+        [[nodiscard]] TypeName GetBottom() const { return m_position.m_y + m_size.m_y; }
+        [[nodiscard]] TypeName GetLeft() const { return m_position.m_x; }
+        [[nodiscard]] TypeName GetRight() const { return m_position.m_x + m_size.m_x; }
 
         [[nodiscard]] Vector2<TypeName> GetCenter() const
         {
-            TypeName centerX = m_position.x + m_size.x / 2; 
-            TypeName centerY = m_position.y + m_size.y / 2;
+            TypeName centerX = m_position.m_x + m_size.m_x / 2; 
+            TypeName centerY = m_position.m_y + m_size.m_y / 2;
             return Vector2<TypeName>(centerX, centerY);
         }
 
-        [[nodiscard]] TypeName GetAdjustedY(TypeName y) const { return m_position.y + y; }
-        [[nodiscard]] TypeName GetAdjustedX(TypeName x) const { return m_position.x + x; }
+        [[nodiscard]] TypeName GetAdjustedY(TypeName y) const { return m_position.m_y + y; }
+        [[nodiscard]] TypeName GetAdjustedX(TypeName x) const { return m_position.m_x + x; }
 
         bool operator==(const Rectangle<TypeName>& other) const
         {
@@ -66,36 +66,36 @@ namespace Brokkr
 
         void Scale(TypeName factor)
         {
-            m_size.x *= factor;
-            m_size.y *= factor;
+            m_size.m_x *= factor;
+            m_size.m_y *= factor;
         }
 
         void Expand(TypeName factor)
         {
-            m_position.x -= m_size.x * (factor - 1) / 2;
-            m_position.y -= m_size.y * (factor - 1) / 2;
-            m_size.x *= factor;
-            m_size.y *= factor;
+            m_position.m_x -= m_size.m_x * (factor - 1) / 2;
+            m_position.m_y -= m_size.m_y * (factor - 1) / 2;
+            m_size.m_x *= factor;
+            m_size.m_y *= factor;
         }
 
         void ClampToBounds(const Rectangle<TypeName>& bounds)
         {
-            m_position.x = std::max(bounds.GetLeft(), std::min(m_position.x, bounds.GetRight() - m_size.x));
-            m_position.y = std::max(bounds.GetTop(), std::min(m_position.y, bounds.GetBottom() - m_size.y));
+            m_position.m_x = std::max(bounds.GetLeft(), std::min(m_position.m_x, bounds.GetRight() - m_size.m_x));
+            m_position.m_y = std::max(bounds.GetTop(), std::min(m_position.m_y, bounds.GetBottom() - m_size.m_y));
         }
 
         [[nodiscard]] bool Contains(const Vector2<TypeName>& point) const
         {
-            return point.x >= m_position.x && point.x < m_position.x + m_size.x
-                && point.y >= m_position.y && point.y < m_position.y + m_size.y;
+            return point.m_x >= m_position.m_x && point.m_x < m_position.m_x + m_size.m_x
+                && point.m_y >= m_position.m_y && point.m_y < m_position.m_y + m_size.m_y;
         }
 
         [[nodiscard]] bool Intersects(const Rectangle<TypeName>& other) const
         {
-            return m_position.x < other.m_position.x + other.m_size.x &&
-                m_position.x + m_size.x > other.m_position.x &&
-                m_position.y < other.m_position.y + other.m_size.y &&
-                m_position.y + m_size.y > other.m_position.y;
+            return m_position.m_x < other.m_position.m_x + other.m_size.m_x &&
+                m_position.m_x + m_size.m_x > other.m_position.m_x &&
+                m_position.m_y < other.m_position.m_y + other.m_size.m_y &&
+                m_position.m_y + m_size.m_y > other.m_position.m_y;
         }
 
         [[nodiscard]] bool Intersects(const Triangle<TypeName>& triangle) const
@@ -120,12 +120,12 @@ namespace Brokkr
         [[nodiscard]] Rectangle<TypeName> Intersection(const Rectangle<TypeName>& other) const
         {
             // Coordinates of the top left corner of the intersection rect
-            int x1 = std::max<TypeName>(m_position.x, other.m_position.x);
-            int y1 = std::max<TypeName>(m_position.y, other.m_position.y);
+            int x1 = std::max<TypeName>(m_position.m_x, other.m_position.m_x);
+            int y1 = std::max<TypeName>(m_position.m_y, other.m_position.m_y);
 
             // Coordinates of the bottom right corner of the intersection rect
-            const int x2 = std::min<TypeName>(m_position.x + m_size.x, other.m_position.x + other.m_size.x);
-            const int y2 = std::min<TypeName>(m_position.y + m_size.y, other.m_position.y + other.m_size.y);
+            const int x2 = std::min<TypeName>(m_position.m_x + m_size.m_x, other.m_position.m_x + other.m_size.m_x);
+            const int y2 = std::min<TypeName>(m_position.m_y + m_size.m_y, other.m_position.m_y + other.m_size.m_y);
 
             // Check if the rects intersect
             if (x2 <= x1 || y2 <= y1) 
@@ -140,10 +140,10 @@ namespace Brokkr
 
         void AddMargin(TypeName marginX, TypeName marginY)
         {
-            m_position.x -= marginX;
-            m_position.y -= marginY;
-            m_size.x += marginX * 2;
-            m_size.y += marginY * 2;
+            m_position.m_x -= marginX;
+            m_position.m_y -= marginY;
+            m_size.m_x += marginX * 2;
+            m_size.m_y += marginY * 2;
         }
 
         [[nodiscard]] TypeName DiagonalLength() const

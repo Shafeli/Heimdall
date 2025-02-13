@@ -19,8 +19,8 @@ Brokkr::Texture2D::Texture2D(const void* pData, size_t size, SDLRenderer* pRende
     // SDL_Surface object
     SDL_Surface* pSurface = IMG_Load_RW(pRWops, 0);
 
-    m_size.x = pSurface->w;
-    m_size.y = pSurface->h;
+    m_size.m_x = pSurface->w;
+    m_size.m_y = pSurface->h;
 
     // Create a surface
     m_pTexture = SDL_CreateTextureFromSurface(pRenderer->GetRenderer(), pSurface);
@@ -75,8 +75,8 @@ SDL_Texture* Brokkr::Texture2D::LoadTexture()
 
         m_pTexture = pTexture;    // Add texture to map
 
-        m_size.x = pSurface->w;
-        m_size.y = pSurface->h;
+        m_size.m_x = pSurface->w;
+        m_size.m_y = pSurface->h;
 
         SDL_FreeSurface(pSurface);  // Free the surface
     }

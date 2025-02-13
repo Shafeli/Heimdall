@@ -110,8 +110,8 @@ void Brokkr::ColliderComponent::AdjustByCurrentPos(float x, float y)
 {
     auto currentPos = m_pOwner->GetComponent<TransformComponent>()->GetTransform().GetPosition();
 
-    currentPos.x += x;
-    currentPos.y += y;
+    currentPos.m_x += x;
+    currentPos.m_y += y;
 
     m_pPhysicsManager->AbsoluteMove(m_transform, currentPos);
 }
@@ -125,7 +125,7 @@ void Brokkr::ColliderComponent::AdjustByPos(const Vector2<float>& newPos)
     Vector2<float> delta = newPos - currentPos;
 
 
-    AdjustBy(delta.x, delta.y);
+    AdjustBy(delta.m_x, delta.m_y);
 }
 
 void Brokkr::ColliderComponent::AdjustBy(float x, float y)

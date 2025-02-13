@@ -3,25 +3,154 @@
 #include "Vector2.h"
 #include "UnitTests/UnitTestSystem.h"
 
-
+// Sources:
+// https://cplusplus.com/forum/general/271350/ - Vector test direction
+// https://www.omnicalculator.com/math/vector - Vector Calculator 01
+// https://www.emathhelp.net/calculators/linear-algebra/vector-calculator/ - Vector Calculator 02 cool things like Orthogonal Complement Calculator
 namespace Brokkr
 {
     class UnitTest
     {
 
+        // Adding Test
         static bool TestVector2Addition()
         {
             Vector2<float> a(1.0f, 2.0f);
             Vector2<float> b(3.0f, 4.0f);
             Vector2<float> result = a + b;
-            return (result.x == 4.0f && result.y == 6.0f);
+            return (result.m_x == 4.0f && result.m_y == 6.0f);
         }
 
+        // Normalization Test
         static bool TestVector2Normalization()
         {
             Vector2<float> v(3.0f, 4.0f);
-            v.Normalize();
-            return (std::abs(v.Length() - 1.0f) < 0.0001f);
+            auto nV = v.Normalize();
+            return (std::abs(nV.Length() - 1.0f) < 0.0001f);
+        }
+
+        static bool TestFromPolar()
+        {
+
+            // Test 1 Basic conversion (45 degrees or pi/4 radians)
+            constexpr float radius = 5.0f;
+            constexpr float angle = PI / 4.0;  // pi/4 (45 degrees)
+
+            const Vector2<float> result = Vector2<float>::FromPolar(radius, angle);
+
+            // Convert polar to Cartesian
+            const float expectedX = radius * std::cos(angle);
+            const float expectedY = radius * std::sin(angle);
+
+            return std::abs(result.m_x - expectedX) < 0.0001f && std::abs(result.m_y - expectedY) < 0.0001f;
+        }
+
+        //static bool TestToPolar() comve back to this later...
+        //{
+        //    Vector2<float> cartesianVector(0.0f, 5.0f);
+        //    Vector2<float> polarVector = cartesianVector.ToPolar();
+        //    Vector2<float> expectedResult(5.0f, 0.0001f);
+        //    return expectedResult == polarVector;
+        //}
+
+        static bool TestApproximatelyEquals()
+        {
+            Vector2<float> v1(500.0f, 500.f);
+            return v1.ApproximatelyEquals({ 500.1f, 500.1f }, 1.0f);
+        }
+
+        static bool TestDot()
+        {
+            Vector2<float> v1(1.0f, 0.0f);
+            Vector2<float> v2(0.0f, 1.0f);
+
+            // Perpendicular check If two vectors are perpendicular their dot product is always 0
+            return v1.Dot(v2) == 0.0f;  
+        }
+
+        static bool TestCross()
+        {
+            Vector2<float> v1(1.0f, 0.0f);
+            Vector2<float> v2(0.0f, 1.0f);
+
+            // The cross product of perpendicular vectors should be 1
+            float result = v1.Cross(v2);
+
+            return result == 1.0f;  // 1 * 1 - 0 * 0 = 1
+        }
+
+        static bool TestAngleBetween()
+        {
+            Vector2<float> v1(1.0f, 0.0f);
+            Vector2<float> v2(0.0f, 1.0f); 
+
+            // Angle between v1 and v2 should be 90 degrees pi/2 radians
+            float angle = v1.AngleBetween(v2);  // Should be pi/2
+
+            return std::abs( angle - PI / 2.0f) < 0.0001;
+        }
+
+        static bool TestProjection()
+        {
+            Vector2<float> v1(3.0f, 4.0f);
+            Vector2<float> v2(1.0f, 0.0f); 
+
+            // Project v1 onto v2
+            Vector2<float> projection = v1.ProjectOnto(v2);
+            Vector2<float> expected(3.0f, 0.0f);
+
+            // Check result TODO: std::abs wrap
+            return projection == expected;
+        }
+
+        static bool TestOrthogonalProjection()
+        {
+            Vector2<float> v1(3.0f, 4.0f);
+            Vector2<float> v2(1.0f, 0.0f);
+
+            //the projection should be v1 - the projection of v1 onto v2
+            Vector2<float> orthogonalProjection = v1.OrthogonalProjectOnto(v2);
+
+            // The expected orthogonal projection should be the Y component of v1
+            Vector2<float> expected(0.0f, 4.0f);  // Perpendicular to v2 x
+
+            // Check result TODO: std::abs wrap
+            return orthogonalProjection == expected;
+        }
+
+        static bool TestProjectOntoClamped()
+        {
+            Vector2<float> v1(3.0f, 4.0f);  // Vector to project
+            Vector2<float> v2(1.0f, 0.0f);  // Projection target x
+
+            float minLength = 2.0f;
+            float maxLength = 4.0f;
+
+            Vector2<float> result = v1.ProjectOntoClamped(v2, minLength, maxLength);
+            float resultLength = result.Length();
+
+            // Check if the length is with in the range
+            constexpr float kTolerance = 0.0001f;
+            const bool lengthValid = (resultLength >= minLength - kTolerance && resultLength <= maxLength + kTolerance);
+
+            // Check if the direction is correct,
+            // if two vectors have the same direction normalized versions be equal
+            bool directionValid = (result.Normalize() == v2.Normalize());
+
+            return lengthValid && directionValid;
+        }
+
+        static bool TestPerpendicular()
+        {
+            Vector2<float> v1(3.0f, 4.0f);
+            Vector2<float> expected(-4.0f, 3.0f);
+
+            // Get the perpendicular vector
+            const Vector2<float> result = v1.Perpendicular();
+
+            // Check if the result matches the expected perpendicular vector
+            constexpr float kTolerance = 0.0001f;
+            return result.m_x - expected.m_x < kTolerance && result.m_y - expected.m_y < kTolerance;
         }
 
     public:
@@ -30,6 +159,16 @@ namespace Brokkr
         {
             pTestSystem->AddTest("Vector2 Addition", TestVector2Addition);
             pTestSystem->AddTest("Vector2 Normalization", TestVector2Normalization);
+            pTestSystem->AddTest("Vector2 FromPolar", TestFromPolar);
+            // pTestSystem->AddTest("Vector2 ToPolar", TestToPolar);
+            pTestSystem->AddTest("Vector2 ApproximatelyEquals", TestApproximatelyEquals);
+            pTestSystem->AddTest("Vector2 Dot", TestDot);
+            pTestSystem->AddTest("Vector2 Cross", TestCross);
+            pTestSystem->AddTest("Vector2 AngleBetween", TestAngleBetween);
+            pTestSystem->AddTest("Vector2 TestProjection", TestProjection);
+            pTestSystem->AddTest("Vector2 TestOrthogonalProjection", TestOrthogonalProjection);
+            pTestSystem->AddTest("Vector2 ProjectionOntoClamped", TestProjectOntoClamped);
+            pTestSystem->AddTest("Vector2 TestPerpendicular", TestPerpendicular);
         }
     };
 

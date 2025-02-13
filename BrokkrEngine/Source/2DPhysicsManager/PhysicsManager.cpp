@@ -67,7 +67,7 @@ void Brokkr::PhysicsManager::SetWorldSize(const float width, const float numHori
 void Brokkr::PhysicsManager::SetWorldSize(const Vector2<float>& size)
 {
     m_worldSize.MoveTo({ 0.f, 0.f });
-    m_worldSize.Resize(size.x, size.y);
+    m_worldSize.Resize(size.m_x, size.m_y);
 
     // resizing invalidates the trees
     m_staticColliderRoot.Destroy();
@@ -314,8 +314,8 @@ void Brokkr::PhysicsManager::ProcessUpdate([[maybe_unused]] const Event& event)
         {
             for (auto& i : pTemp->m_displacements)
             {
-                currentPosition.x += i.x;
-                currentPosition.y += i.y;
+                currentPosition.m_x += i.m_x;
+                currentPosition.m_y += i.m_y;
                 MoveNotify(pTemp, currentPosition, i); // Check the future move
             }
         }

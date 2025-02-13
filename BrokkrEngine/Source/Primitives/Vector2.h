@@ -5,6 +5,8 @@
 #include <vector>
 #include "Core/EngineDefinitions.h"
 
+// Sources:
+// https://www.haroldserrano.com/blog/developing-a-math-engine-in-c-implementing-vectors - Developing a Math Engine
 namespace Brokkr
 {
     template <typename TypeName>
@@ -14,17 +16,17 @@ namespace Brokkr
         static constexpr TypeName kEPSILON = static_cast<TypeName>(1e-6);
 
     public:
-        TypeName x, y;
+        TypeName m_x, m_y;
 
         // construction
-        Vector2() : x(TypeName(0)), y(TypeName(0)) {}
+        Vector2() : m_x(TypeName(0)), m_y(TypeName(0)) {}
         Vector2(const Vector2<TypeName>& v2) = default;
-        Vector2(const TypeName x, const TypeName y) : x(x), y(y) {}
+        Vector2(const TypeName x, const TypeName y) : m_x(x), m_y(y) {}
 
         // prime operators
-        Vector2<TypeName> operator+(const Vector2<TypeName>& other) const { return Vector2<TypeName>(x + other.x, y + other.y); }
-        Vector2<TypeName> operator-(const Vector2<TypeName>& other) const { return Vector2<TypeName>(x - other.x, y - other.y); }
-        Vector2<TypeName> operator*(TypeName scalar) const { return Vector2<TypeName>(x * scalar, y * scalar); }
+        Vector2<TypeName> operator+(const Vector2<TypeName>& other) const { return Vector2<TypeName>(m_x + other.m_x, m_y + other.m_y); }
+        Vector2<TypeName> operator-(const Vector2<TypeName>& other) const { return Vector2<TypeName>(m_x - other.m_x, m_y - other.m_y); }
+        Vector2<TypeName> operator*(TypeName scalar) const { return Vector2<TypeName>(m_x * scalar, m_y * scalar); }
         Vector2<TypeName> operator*(const TypeName matrix[2][2]) const
         {
             return ApplyRotationMatrix(matrix);
@@ -33,23 +35,23 @@ namespace Brokkr
         Vector2<TypeName> operator/(TypeName scalar) const
         {
             assert(scalar != TypeName(0)); // division by zero
-            return Vector2<TypeName>(x / scalar, y / scalar);
+            return Vector2<TypeName>(m_x / scalar, m_y / scalar);
         }
 
         Vector2<TypeName>& operator/=(TypeName scalar)
         {
             assert(scalar != TypeName(0));
-            x /= scalar;
-            y /= scalar;
+            m_x /= scalar;
+            m_y /= scalar;
             return *this;
         }
         Vector2<TypeName>& operator=(const Vector2<TypeName>& other) = default;
-        Vector2<TypeName>& operator*=(TypeName scalar) { x *= scalar; y *= scalar; return (*this); }
-        bool operator==(const Vector2<TypeName>& other) const { return (x == other.x && y == other.y); }
-        bool operator!=(const Vector2<TypeName>& other) const { return (x != other.x || y != other.y); }
-        Vector2<TypeName>& operator+=(const Vector2<TypeName>& other) { x += other.x; y += other.y; return (*this); }
-        Vector2<TypeName>& operator-=(const Vector2<TypeName>& other) { x -= other.x; y -= other.y; return (*this); }
-        Vector2<TypeName> operator-() const { return Vector2<TypeName>(-x, -y); }  // inverse of the vector 
+        Vector2<TypeName>& operator*=(TypeName scalar) { m_x *= scalar; m_y *= scalar; return (*this); }
+        bool operator==(const Vector2<TypeName>& other) const { return (m_x == other.m_x && m_y == other.m_y); }
+        bool operator!=(const Vector2<TypeName>& other) const { return (m_x != other.m_x || m_y != other.m_y); }
+        Vector2<TypeName>& operator+=(const Vector2<TypeName>& other) { m_x += other.m_x; m_y += other.m_y; return (*this); }
+        Vector2<TypeName>& operator-=(const Vector2<TypeName>& other) { m_x -= other.m_x; m_y -= other.m_y; return (*this); }
+        Vector2<TypeName> operator-() const { return Vector2<TypeName>(-m_x, -m_y); }  // inverse of the vector 
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // Math
@@ -63,37 +65,48 @@ namespace Brokkr
             return Vector2<TypeName>(x, y);
         }
 
-        // Convert this Vector2 from Cartesian to Polar and return as a pair (radius, angleRadians)
-        [[nodiscard]] std::pair<TypeName, TypeName> ToPolar() const
-        {
-            TypeName radius = Length();
-            TypeName angleRadians = std::atan2(y, x);
-            return { radius, angleRadians };
-        }
+        // TODO: Vector2 to polar
+        // Convert this Vector2 from Cartesian to Polar and return as (radius, angleRadians)
+        //[[nodiscard]] Vector2<TypeName> ToPolar() const
+        //{
+        //    TypeName radius = Length();
+        //    TypeName angleRadians = std::atan2(m_y, m_x);
+        //    return  Vector2<TypeName>(radius, angleRadians);
+        //}
 
         [[nodiscard]] TypeName Length() const
         {
-            return std::sqrt((x * x) + (y * y));
+            return { std::sqrt((m_x * m_x) + (m_y * m_y)) };
         }
 
-        [[nodiscard]] TypeName LengthSquared() const { return ((x * x) + (y * y)); }
+        [[nodiscard]] TypeName LengthSquared() const { return ((m_x * m_x) + (m_y * m_y)); }
 
-        void Normalize()
+        [[nodiscard]] Vector2<TypeName> Normalize()
         {
+            TypeName x = m_x;
+            TypeName y = m_y;
             const TypeName len = Length();
+
             if (len > kEPSILON)
             {
                 x /= len;
                 y /= len;
             }
+            else
+            {
+                return Vector2(); // default is a zero vector
+            }
+
+            return Vector2<TypeName>(x, y);
         }
 
-        // For operations that require an approximate equality checks
+        // Updated IsExtremelyCloseTo adjustable tolerance
         [[nodiscard]] bool ApproximatelyEquals(const Vector2<TypeName>& other, TypeName tolerance = kEPSILON) const
         {
-            return std::abs(x - other.x) < tolerance && std::abs(y - other.y) < tolerance;
+            return std::abs(m_x - other.m_x) < tolerance && std::abs(m_y - other.m_y) < tolerance;
         }
 
+        // Pretty sure this is from GAP295 
         [[nodiscard]] bool IsExtremelyCloseTo(const Vector2<TypeName>& right) const
         {
             if (const Vector2<TypeName> diff = right - (*this); diff.Length() < 0.01f)
@@ -103,12 +116,12 @@ namespace Brokkr
 
         [[nodiscard]] TypeName Dot(const Vector2<TypeName>& other) const
         {
-            return (x * other.x) + (y * other.y);
+            return (m_x * other.m_x) + (m_y * other.m_y);
         }
 
         [[nodiscard]] TypeName Cross(const Vector2<TypeName>& other) const
         {
-            return (x * other.y) - (y * other.x);
+            return (m_x * other.m_y) - (m_y * other.m_x);
         }
 
         // Calculated between two vectors in radians
@@ -124,55 +137,55 @@ namespace Brokkr
             return TypeName(0);
         }
 
-        [[nodiscard]] Vector2<TypeName> OrthogonalProjectOnto(const Vector2<TypeName>& other) const
-        {
-            return (*this) - ProjectOnto(other);
-        }
-
         [[nodiscard]] Vector2<TypeName> ProjectOnto(const Vector2<TypeName>& other) const
         {
             const TypeName scalar = Dot(other) / other.LengthSquared();
             return other * scalar;
         }
 
+        [[nodiscard]] Vector2<TypeName> OrthogonalProjectOnto(const Vector2<TypeName>& other) const
+        {
+            return (*this) - ProjectOnto(other);
+        }
+
         // Clamp the projection result to a range
         [[nodiscard]] Vector2<TypeName> ProjectOntoClamped(const Vector2<TypeName>& other, TypeName minLength, TypeName maxLength) const
         {
+            //Vector2<TypeName> projection = ProjectOnto(other);
+            //Vector2<TypeName> normProjection = projection.Normalize();
+            //TypeName length = projection.Length();
+            //if (length < minLength) 
+            //{
+            //    normProjection *= minLength;
+            //}
+            //else if (length > maxLength) 
+            //{
+            //    normProjection *= maxLength;
+            //}
+            //return normProjection;
+
             Vector2<TypeName> projection = ProjectOnto(other);
             TypeName length = projection.Length();
-            if (length < minLength) 
+
+            if (length < minLength)
             {
-                projection.Normalize();
-                projection *= minLength;
+                projection = projection.Normalize() * minLength;
             }
-            else if (length > maxLength) 
+            else if (length > maxLength)
             {
-                projection.Normalize();
-                projection *= maxLength;
+                projection = projection.Normalize() * maxLength;
             }
+
             return projection;
         }
 
         // Get a perpendicular vector
         [[nodiscard]] Vector2<TypeName> Perpendicular() const
         {
-            return Vector2<TypeName>(-y, x);
+            return Vector2<TypeName>(-m_y, m_x);
         }
 
-        // Generate a array of vectors linearly spaced between two vectors
-        static std::vector<Vector2<TypeName>> LinearSpace(const Vector2<TypeName>& start, const Vector2<TypeName>& end, int numSteps)
-        {
-            std::vector<Vector2<TypeName>> result;
-            if (numSteps <= 1) return { start };
-
-            Vector2<TypeName> step = (end - start) * (1.0 / (numSteps - 1));
-            for (int i = 0; i < numSteps; ++i)
-            {
-                result.push_back(start + step * static_cast<TypeName>(i));
-            }
-            return result;
-        }
-
+        //TODO: Vector2 Unit Tests needed for everything after this
         // Reflect this vector across a normal
         [[nodiscard]] Vector2<TypeName> Reflect(const Vector2<TypeName>& normal) const
         {
@@ -206,24 +219,14 @@ namespace Brokkr
             return (*this) * (1 - t) + target * t;
         }
 
-        TypeName EaseIn(TypeName t) const { return t * t; }
-        TypeName EaseOut(TypeName t) const { return t * (2 - t); }
-        TypeName EaseInOut(TypeName t) const { return (t < 0.5) ? (2 * t * t) : (-1 + (4 - 2 * t) * t); }
-
-        [[nodiscard]] Vector2<TypeName> LerpEaseIn(const Vector2<TypeName>& target, TypeName t) const
-        {
-            t = EaseIn(t);
-            return Lerp(target, t);
-        }
-
         // Rotate the vector by an angle in radians
         [[nodiscard]] Vector2<TypeName> Rotate(TypeName angleRadians) const
         {
             const TypeName cosAngle = std::cos(angleRadians);
             const TypeName sinAngle = std::sin(angleRadians);
             return Vector2<TypeName>(
-                x * cosAngle - y * sinAngle,
-                x * sinAngle + y * cosAngle
+                m_x * cosAngle - m_y * sinAngle,
+                m_x * sinAngle + m_y * cosAngle
                 );
         }
 
@@ -244,25 +247,29 @@ namespace Brokkr
         [[nodiscard]] Vector2<TypeName> ApplyRotationMatrix(const TypeName matrix[2][2]) const
         {
             return Vector2<TypeName>(
-                x * matrix[0][0] + y * matrix[0][1],
-                x * matrix[1][0] + y * matrix[1][1]
+                m_x * matrix[0][0] + m_y * matrix[0][1],
+                m_x * matrix[1][0] + m_y * matrix[1][1]
                 );
         }
 
         // apply both rotation and translation
-        Vector2<TypeName> Transform(const Vector2<TypeName>& translation, TypeName angleRadians) const
+        [[nodiscard]] Vector2<TypeName> Transform(const Vector2<TypeName>& translation, TypeName angleRadians) const
         {
             return Rotate(angleRadians) + translation;
         }
 
-        // Clamp the vector's magnitude to a maximum value
-        void ClampMagnitude(TypeName maxMagnitude)
+        // Generate a array of vectors equally spaced between two vectors
+        static std::vector<Vector2<TypeName>> LinearSpace(const Vector2<TypeName>& start, const Vector2<TypeName>& end, int numSteps)
         {
-            if (Length() > maxMagnitude)
+            std::vector<Vector2<TypeName>> result;
+            if (numSteps <= 1) return { start };
+
+            Vector2<TypeName> step = (end - start) * (1.0 / (numSteps - 1));
+            for (int i = 0; i < numSteps; ++i)
             {
-                Normalize();
-                (*this) *= maxMagnitude;
+                result.push_back(start + step * static_cast<TypeName>(i));
             }
+            return result;
         }
 
         // Generate a random Vector2 with in range
@@ -278,17 +285,17 @@ namespace Brokkr
         // if the vector is a zero vector
         [[nodiscard]] bool IsZero(TypeName tolerance = 1e-6) const
         {
-            return std::abs(x) < tolerance && std::abs(y) < tolerance;
+            return std::abs(m_x) < tolerance && std::abs(m_y) < tolerance;
         }
 
         [[nodiscard]] Vector2<TypeName> MinComponents(const Vector2<TypeName>& other) const
         {
-            return Vector2<TypeName>(std::min(x, other.x), std::min(y, other.y));
+            return Vector2<TypeName>(std::min(m_x, other.m_x), std::min(m_y, other.m_y));
         }
 
         [[nodiscard]] Vector2<TypeName> MaxComponents(const Vector2<TypeName>& other) const
         {
-            return Vector2<TypeName>(std::max(x, other.x), std::max(y, other.y));
+            return Vector2<TypeName>(std::max(m_x, other.m_x), std::max(m_y, other.m_y));
         }
 
         [[nodiscard]] TypeName DistanceTo(const Vector2<TypeName>& other) const
@@ -303,27 +310,25 @@ namespace Brokkr
         */
         [[nodiscard]] TypeName ManhattanDistance(const Vector2<TypeName>& other) const
         {
-            return std::abs(x - other.x) + std::abs(y - other.y);
+            return std::abs(m_x - other.m_x) + std::abs(m_y - other.m_y);
         }
 
-        // convert the vector to a string for easy debugging
+        // convert the vector to a string format Vector2(x,y)
         [[nodiscard]] std::string ToString() const
         {
-            return "Vector2(" + std::to_string(x) + ", " + std::to_string(y) + ")";
+            return "Vector2(" + std::to_string(m_x) + ", " + std::to_string(m_y) + ")";
         }
 
+        // To CSV format x , y
         std::string Serialize() const
         {
-            return std::to_string(x) + "," + std::to_string(y);
+            return std::to_string(m_x) + "," + std::to_string(m_y);
         }
 
         // string data to a Vector2 "number,number"
         static Vector2<TypeName> Deserialize(const std::string& data)
         {
-            const size_t commaPos = data.find(',');
-            TypeName x = static_cast<TypeName>(std::stod(data.substr(0, commaPos)));
-            TypeName y = static_cast<TypeName>(std::stod(data.substr(commaPos + 1)));
-            return Vector2<TypeName>(x, y);
+            //
         }
 
     };
@@ -331,37 +336,37 @@ namespace Brokkr
     template <typename TypeName>
     Vector2<TypeName> operator+(const Vector2<TypeName>& left, const Vector2<TypeName>& right)
     {
-        return Vector2<TypeName>(left.x + right.x, left.y + right.y);
+        return Vector2<TypeName>(left.m_x + right.m_x, left.m_y + right.m_y);
     }
 
     template <typename TypeName>
     Vector2<TypeName> operator-(const Vector2<TypeName>& left, const Vector2<TypeName>& right)
     {
-        return Vector2<TypeName>(left.x - right.x, left.y - right.y);
+        return Vector2<TypeName>(left.m_x - right.m_x, left.m_y - right.m_y);
     }
 
     template <typename TypeName>
     Vector2<TypeName> operator*(const Vector2<TypeName>& left, const Vector2<TypeName>& right)
     {
-        return Vector2<TypeName>(left.x * right.x, left.y * right.y);
+        return Vector2<TypeName>(left.m_x * right.m_x, left.m_y * right.m_y);
     }
 
     template <typename TypeName>
     Vector2<TypeName> operator*(const Vector2<TypeName>& left, const TypeName right)
     {
-        return Vector2<TypeName>(left.x * right, left.y * right);
+        return Vector2<TypeName>(left.m_x * right, left.m_y * right);
     }
 
     template <typename TypeName>
     Vector2<TypeName> operator*(const TypeName left, const Vector2<TypeName>& right)
     {
-        return Vector2<TypeName>(left * right.x, left * right.y);
+        return Vector2<TypeName>(left * right.m_x, left * right.m_y);
     }
 
     template <typename TypeName>
     Vector2<TypeName> operator/(const Vector2<TypeName>& left, const TypeName right)
     {
-        return Vector2<TypeName>(left.x / right, left.y / right);
+        return Vector2<TypeName>(left.m_x / right, left.m_y / right);
     }
 
 }

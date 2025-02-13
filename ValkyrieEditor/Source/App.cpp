@@ -26,7 +26,7 @@ public:
 		auto pMainWindow = m_pSdlWindowManager->AddWindow<Brokkr::SDLWindow>("EditorWindowMain", 1024, 768);
 		auto pMainRenderer = m_pSdlWindowManager->GetRendererForWindow(pMainWindow);
 
-		m_pAssetManager = AddCoreSystem<Brokkr::AssetManager>(pMainRenderer, pMainWindow);
+		m_pAssetManager = AddCoreSystem<Brokkr::AssetManager>(pMainRenderer, pMainWindow, Brokkr::EngineDefinitions::ASSETS_PATH);
 
 		m_pUnitTestSystem = AddCoreSystem<Brokkr::UnitTestSystem>();
 

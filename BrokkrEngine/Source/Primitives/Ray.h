@@ -41,13 +41,13 @@ namespace Brokkr
         // origin to the first point of intersection.
         [[nodiscard]] bool Intersects(const Rectangle<TypeName>& rect, TypeName& outDistance) const
         {
-            TypeName tmin = (rect.GetLeft() - m_origin.x) / m_direction.x;
-            TypeName tmax = (rect.GetRight() - m_origin.x) / m_direction.x;
+            TypeName tmin = (rect.GetLeft() - m_origin.m_x) / m_direction.m_x;
+            TypeName tmax = (rect.GetRight() - m_origin.m_x) / m_direction.m_x;
 
             if (tmin > tmax) std::swap(tmin, tmax);
 
-            TypeName tymin = (rect.GetTop() - m_origin.y) / m_direction.y;
-            TypeName tymax = (rect.GetBottom() - m_origin.y) / m_direction.y;
+            TypeName tymin = (rect.GetTop() - m_origin.m_y) / m_direction.m_y;
+            TypeName tymax = (rect.GetBottom() - m_origin.m_y) / m_direction.m_y;
 
             if (tymin > tymax) std::swap(tymin, tymax);
 

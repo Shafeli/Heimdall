@@ -37,10 +37,10 @@ namespace Brokkr
 
         [[nodiscard]] bool Intersects(const Rectangle<TypeName>& rect) const
         {
-            TypeName closestX = std::max(rect.GetLeft(), std::min(m_center.x, rect.GetRight()));
-            TypeName closestY = std::max(rect.GetTop(), std::min(m_center.y, rect.GetBottom()));
-            TypeName distanceSquared = (m_center.x - closestX) * (m_center.x - closestX) +
-                (m_center.y - closestY) * (m_center.y - closestY);
+            TypeName closestX = std::max(rect.GetLeft(), std::min(m_center.m_x, rect.GetRight()));
+            TypeName closestY = std::max(rect.GetTop(), std::min(m_center.m_y, rect.GetBottom()));
+            TypeName distanceSquared = (m_center.m_x - closestX) * (m_center.m_x - closestX) +
+                (m_center.m_y - closestY) * (m_center.m_y - closestY);
             return distanceSquared <= m_radius * m_radius;
         }
 

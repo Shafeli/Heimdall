@@ -66,14 +66,14 @@ namespace Brokkr
 
                 for (const auto& i : m_displacements)
                 {
-                    m_collider.AdjustX(i.x);
-                    m_collider.AdjustY(i.y);
+                    m_collider.AdjustX(i.m_x);
+                    m_collider.AdjustY(i.m_y);
                 }
 
                 for (const auto& i : m_corrections)
                 {
-                    m_collider.AdjustX(i.x);
-                    m_collider.AdjustY(i.y);
+                    m_collider.AdjustX(i.m_x);
+                    m_collider.AdjustY(i.m_y);
                 }
 
                 m_inprocess = false;
