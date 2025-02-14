@@ -13,7 +13,7 @@ namespace Brokkr
     class Vector2
     {
         // constant small epsilon value to avoid division by zero
-        static constexpr TypeName kEPSILON = static_cast<TypeName>(1e-6);
+        static constexpr TypeName kTolerance = static_cast<TypeName>(1e-6);
 
     public:
         TypeName m_x, m_y;
@@ -87,7 +87,7 @@ namespace Brokkr
             TypeName y = m_y;
             const TypeName len = Length();
 
-            if (len > kEPSILON)
+            if (len > kTolerance)
             {
                 x /= len;
                 y /= len;
@@ -100,18 +100,18 @@ namespace Brokkr
             return Vector2<TypeName>(x, y);
         }
 
+        // Pretty sure this is from GAP295 
+        //[[nodiscard]] bool IsExtremelyCloseTo(const Vector2<TypeName>& right) const
+        //{
+        //    if (const Vector2<TypeName> diff = right - (*this); diff.Length() < kTolerance)
+        //        return true;
+        //    return false;
+        //}
+
         // Updated IsExtremelyCloseTo adjustable tolerance
-        [[nodiscard]] bool ApproximatelyEquals(const Vector2<TypeName>& other, TypeName tolerance = kEPSILON) const
+        [[nodiscard]] bool ApproximatelyEquals(const Vector2<TypeName>& other, TypeName tolerance = kTolerance) const
         {
             return std::abs(m_x - other.m_x) < tolerance && std::abs(m_y - other.m_y) < tolerance;
-        }
-
-        // Pretty sure this is from GAP295 
-        [[nodiscard]] bool IsExtremelyCloseTo(const Vector2<TypeName>& right) const
-        {
-            if (const Vector2<TypeName> diff = right - (*this); diff.Length() < 0.01f)
-                return true;
-            return false;
         }
 
         [[nodiscard]] TypeName Dot(const Vector2<TypeName>& other) const
@@ -130,13 +130,14 @@ namespace Brokkr
             const TypeName dot = Dot(other);
             const TypeName l1 = Length();
             const TypeName l2 = other.Length();
-            if (l1 > kEPSILON && l2 > kEPSILON) 
+            if (l1 > kTolerance && l2 > kTolerance) 
             {
                 return std::acos(dot / (l1 * l2)); // inverse cosine
             }
             return TypeName(0);
         }
 
+        // Sources : https://www.geeksforgeeks.org/vector-projection-formula/# Vector Projection – Formula, Derivation & Examples
         [[nodiscard]] Vector2<TypeName> ProjectOnto(const Vector2<TypeName>& other) const
         {
             const TypeName scalar = Dot(other) / other.LengthSquared();
@@ -197,7 +198,14 @@ namespace Brokkr
         [[nodiscard]] Vector2<TypeName> ReflectClamped(const Vector2<TypeName>& normal, TypeName maxLength) const
         {
             Vector2<TypeName> reflected = Reflect(normal);
-            reflected.ClampMagnitude(maxLength);
+            TypeName reflectedMagnitude = reflected.Length();
+
+            // Clamp Magnitude for reflected
+            if (reflectedMagnitude > maxLength)
+            {
+                reflected = reflected.Normalize() * maxLength;
+            }
+
             return reflected;
         }
 
@@ -207,16 +215,9 @@ namespace Brokkr
         // Vector2<float> result = v1.Lerp(v2, t);
         // Result will be (2.5, 2.5), 25% of the way from (0, 0) to (10, 10)
         // Interpolate between this vector and another vector 
-        [[nodiscard]] Vector2<TypeName> Lerp(const Vector2<TypeName>& target, TypeName t) const
+        [[nodiscard]] static Vector2<TypeName> Lerp(const Vector2<TypeName>& start, const Vector2<TypeName>& end, TypeName t)
         {
-            return (*this) * (1 - t) + target * t;
-        }
-
-        // Interpolate between this vector and another vector 
-        [[nodiscard]] Vector2<TypeName> ClampLerp(const Vector2<TypeName>& target, TypeName t, TypeName minT = 0.0f, TypeName maxT = 1.0f) const
-        {
-            t = std::clamp(t, minT, maxT);
-            return (*this) * (1 - t) + target * t;
+            return start + (end - start) * t;
         }
 
         // Rotate the vector by an angle in radians
@@ -224,13 +225,10 @@ namespace Brokkr
         {
             const TypeName cosAngle = std::cos(angleRadians);
             const TypeName sinAngle = std::sin(angleRadians);
-            return Vector2<TypeName>(
-                m_x * cosAngle - m_y * sinAngle,
-                m_x * sinAngle + m_y * cosAngle
-                );
+            return Vector2<TypeName>(m_x * cosAngle - m_y * sinAngle,m_x * sinAngle + m_y * cosAngle);
         }
 
-        // rotate the vector around a point
+        // rotate this vector around a given point
         [[nodiscard]] Vector2<TypeName> RotateAround(const Vector2<TypeName>& point, TypeName angleRadians) const
         {
             Vector2<TypeName> translated = (*this) - point;
@@ -246,9 +244,10 @@ namespace Brokkr
         // Transform Vector by a rotation matrix
         [[nodiscard]] Vector2<TypeName> ApplyRotationMatrix(const TypeName matrix[2][2]) const
         {
-            return Vector2<TypeName>(
-                m_x * matrix[0][0] + m_y * matrix[0][1],
-                m_x * matrix[1][0] + m_y * matrix[1][1]
+            return Vector2<TypeName>
+                (
+                    m_x * matrix[0][0] + m_y * matrix[0][1],
+                    m_x * matrix[1][0] + m_y * matrix[1][1]
                 );
         }
 
@@ -272,18 +271,8 @@ namespace Brokkr
             return result;
         }
 
-        // Generate a random Vector2 with in range
-        static Vector2<TypeName> Random(TypeName minX, TypeName maxX, TypeName minY, TypeName maxY)
-        {
-            static std::random_device rd;
-            static std::mt19937 gen(rd());
-            std::uniform_real_distribution<TypeName> disX(minX, maxX);
-            std::uniform_real_distribution<TypeName> disY(minY, maxY);
-            return Vector2<TypeName>(disX(gen), disY(gen));
-        }
-
         // if the vector is a zero vector
-        [[nodiscard]] bool IsZero(TypeName tolerance = 1e-6) const
+        [[nodiscard]] bool IsZero(TypeName tolerance = kTolerance) const
         {
             return std::abs(m_x) < tolerance && std::abs(m_y) < tolerance;
         }
@@ -320,7 +309,7 @@ namespace Brokkr
         }
 
         // To CSV format x , y
-        std::string Serialize() const
+        [[nodiscard]] std::string Serialize() const
         {
             return std::to_string(m_x) + "," + std::to_string(m_y);
         }
@@ -328,7 +317,7 @@ namespace Brokkr
         // string data to a Vector2 "number,number"
         static Vector2<TypeName> Deserialize(const std::string& data)
         {
-            //
+            // TODO Vector2 Deserialize()
         }
 
     };

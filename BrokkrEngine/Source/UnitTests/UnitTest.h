@@ -32,9 +32,9 @@ namespace Brokkr
         static bool TestFromPolar()
         {
 
-            // Test 1 Basic conversion (45 degrees or pi/4 radians)
+            // Test 45 degrees or pi/4 radians
             constexpr float radius = 5.0f;
-            constexpr float angle = PI / 4.0;  // pi/4 (45 degrees)
+            constexpr float angle = PI / 4.0;  // pi/4 45 degrees
 
             const Vector2<float> result = Vector2<float>::FromPolar(radius, angle);
 
@@ -122,22 +122,21 @@ namespace Brokkr
         {
             Vector2<float> v1(3.0f, 4.0f);  // Vector to project
             Vector2<float> v2(1.0f, 0.0f);  // Projection target x
+            constexpr float kMinLength = 2.0f;
+            constexpr float kMaxLength = 4.0f;
 
-            float minLength = 2.0f;
-            float maxLength = 4.0f;
-
-            Vector2<float> result = v1.ProjectOntoClamped(v2, minLength, maxLength);
-            float resultLength = result.Length();
+            Vector2<float> result = v1.ProjectOntoClamped(v2, kMinLength, kMaxLength);
+            const float resultLength = result.Length();
 
             // Check if the length is with in the range
             constexpr float kTolerance = 0.0001f;
-            const bool lengthValid = (resultLength >= minLength - kTolerance && resultLength <= maxLength + kTolerance);
+            const bool isLengthValid = resultLength >= kMinLength - kTolerance && resultLength <= kMaxLength + kTolerance;
 
             // Check if the direction is correct,
             // if two vectors have the same direction normalized versions be equal
-            bool directionValid = (result.Normalize() == v2.Normalize());
+            const bool isDirectionValid = (result.Normalize() == v2.Normalize());
 
-            return lengthValid && directionValid;
+            return isLengthValid && isDirectionValid;
         }
 
         static bool TestPerpendicular()
@@ -151,6 +150,111 @@ namespace Brokkr
             // Check if the result matches the expected perpendicular vector
             constexpr float kTolerance = 0.0001f;
             return result.m_x - expected.m_x < kTolerance && result.m_y - expected.m_y < kTolerance;
+        }
+
+        static bool TestReflect()
+        {
+            const Vector2<float> v1(1.0f, -1.0f);           // Incoming vector
+            const Vector2<float> normal(0.0f, 1.0f);        // Reflect Y
+            const Vector2<float> expected(1.0f, 1.0f);      // Expected reflection
+
+            const Vector2<float> reflected = v1.Reflect(normal);
+
+            return reflected == expected;
+        }
+
+        static bool TestReflectClamped()
+        {
+            const Vector2<float> v1(3.0f, -4.0f);           // Incoming vector
+            const Vector2<float> normal(0.0f, 1.0f);        // Reflect Y
+            Vector2<float> expected(3.0f, 4.0f);            // Expected reflection without clamping
+            constexpr float kMaxLength = 5.0f;
+
+
+            Vector2<float> reflected = v1.ReflectClamped(normal, kMaxLength);
+            const float reflectedLength = reflected.Length();
+
+            // Check if the length is with in the range
+            constexpr float kTolerance = 0.0001f;
+            const bool isLengthValid = reflectedLength <= kMaxLength + kTolerance;
+
+            // Check direction should not change direction
+            const bool isDirectionValid = reflected.Normalize() == expected.Normalize();
+
+            return isLengthValid && isDirectionValid;
+        }
+
+        static bool TestLerp()
+        {
+            const Vector2<float> start(0.0f, 0.0f);
+            const Vector2<float> end(10.0f, 10.0f);
+            const Vector2<float> half(5.0f, 5.0f);
+
+            // Test t = start
+            const Vector2<float> resultStart = Vector2<float>::Lerp(start, end, 0.0f);
+            const bool testStart = resultStart == start;
+
+            // Test t = end
+            const Vector2<float> resultEnd = Vector2<float>::Lerp(start, end, 1.0f);
+            const bool testEnd = resultEnd == end;
+
+            // Test t = 0.5 halfway between start end end
+            const Vector2<float> resultHalf = Vector2<float>::Lerp(start, end, 0.5f);
+            const bool testHalf = resultHalf == half;
+
+            return testStart && testEnd && testHalf;
+        }
+
+        static bool TestRotate()
+        {
+            const Vector2<float> v(1.0f, 0.0f);              // Start
+            const Vector2<float> expected(0.0f, 1.0f);       // Expected result
+            constexpr float kTolerance = 0.0001f;
+
+            const Vector2<float> rotated = v.Rotate(static_cast<float>(PI / 2.0));  // 90degrees pi/2
+            return rotated.ApproximatelyEquals(expected, kTolerance);
+        }
+
+        static bool TestRotateAround()
+        {
+            const Vector2<float> v(3.0f, 3.0f);         // Start
+            const Vector2<float> pivot(1.0f, 1.0f);     // Rotation pivot/ anchor point
+            const Vector2<float> expected(-1.0f, 3.0f); // Expected result after 90-degree rotation
+            constexpr float kTolerance = 0.0001f;
+
+            // Rotate v around pivot by 90 degree
+            const Vector2<float> rotated = v.RotateAround(pivot, static_cast<float>(PI / 2.0));
+            return rotated.ApproximatelyEquals(expected, kTolerance);
+        }
+
+        static bool TestRotateDegrees()
+        {
+            const Vector2<float> v(1.0f, 0.0f);                 // Start
+            const Vector2<float> expected(0.0f, 1.0f);          // Expected result
+            constexpr float kTolerance = 0.0001f;
+
+            const Vector2<float> rotated = v.RotateDegrees(90.0f);  // 90degrees pi/2
+            return rotated.ApproximatelyEquals(expected, kTolerance);
+        }
+
+        static bool TestApplyRotationMatrix()
+        {
+            const Vector2<float> v(1.0f, 0.0f);         // Original vector
+            const Vector2<float> expected(0.0f, 1.0f);  // 90degree
+            constexpr float kTolerance = 0.0001f;
+
+            // 90degree rotation matrix
+            constexpr float kRotationMatrix[2][2] = 
+            {
+                {0.0f, -1.0f},
+                {1.0f,  0.0f}
+            };
+
+            // Apply rotation
+            const Vector2<float> rotated = v.ApplyRotationMatrix(kRotationMatrix);
+
+            // Check if result is approximately the expected value
+            return rotated.ApproximatelyEquals(expected, kTolerance);
         }
 
     public:
@@ -169,6 +273,13 @@ namespace Brokkr
             pTestSystem->AddTest("Vector2 TestOrthogonalProjection", TestOrthogonalProjection);
             pTestSystem->AddTest("Vector2 ProjectionOntoClamped", TestProjectOntoClamped);
             pTestSystem->AddTest("Vector2 TestPerpendicular", TestPerpendicular);
+            pTestSystem->AddTest("Vector2 TestReflect", TestReflect);
+            pTestSystem->AddTest("Vector2 TestReflectClamped", TestReflectClamped);
+            pTestSystem->AddTest("Vector2 TestLerp", TestLerp);
+            pTestSystem->AddTest("Vector2 TestRotate", TestRotate);
+            pTestSystem->AddTest("Vector2 TestRotateAround", TestRotateAround);
+            pTestSystem->AddTest("Vector2 TestRotateDegrees", TestRotateDegrees);
+            pTestSystem->AddTest("Vector2 TestApplyRotationMatrix", TestApplyRotationMatrix);
         }
     };
 
