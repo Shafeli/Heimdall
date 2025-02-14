@@ -186,7 +186,6 @@ namespace Brokkr
             return Vector2<TypeName>(-m_y, m_x);
         }
 
-        //TODO: Vector2 Unit Tests needed for everything after this
         // Reflect this vector across a normal
         [[nodiscard]] Vector2<TypeName> Reflect(const Vector2<TypeName>& normal) const
         {
@@ -251,45 +250,26 @@ namespace Brokkr
                 );
         }
 
-        // apply both rotation and translation
-        [[nodiscard]] Vector2<TypeName> Transform(const Vector2<TypeName>& translation, TypeName angleRadians) const
-        {
-            return Rotate(angleRadians) + translation;
-        }
-
         // Generate a array of vectors equally spaced between two vectors
         static std::vector<Vector2<TypeName>> LinearSpace(const Vector2<TypeName>& start, const Vector2<TypeName>& end, int numSteps)
         {
+            // Result vector list
             std::vector<Vector2<TypeName>> result;
+
+            // If invalid input
             if (numSteps <= 1) return { start };
 
+            // Get step size
             Vector2<TypeName> step = (end - start) * (1.0 / (numSteps - 1));
+
+            // Generate numStep points
+            result.reserve(numSteps);
             for (int i = 0; i < numSteps; ++i)
             {
                 result.push_back(start + step * static_cast<TypeName>(i));
             }
+
             return result;
-        }
-
-        // if the vector is a zero vector
-        [[nodiscard]] bool IsZero(TypeName tolerance = kTolerance) const
-        {
-            return std::abs(m_x) < tolerance && std::abs(m_y) < tolerance;
-        }
-
-        [[nodiscard]] Vector2<TypeName> MinComponents(const Vector2<TypeName>& other) const
-        {
-            return Vector2<TypeName>(std::min(m_x, other.m_x), std::min(m_y, other.m_y));
-        }
-
-        [[nodiscard]] Vector2<TypeName> MaxComponents(const Vector2<TypeName>& other) const
-        {
-            return Vector2<TypeName>(std::max(m_x, other.m_x), std::max(m_y, other.m_y));
-        }
-
-        [[nodiscard]] TypeName DistanceTo(const Vector2<TypeName>& other) const
-        {
-            return (*this - other).Length();
         }
 
         /*
@@ -299,7 +279,32 @@ namespace Brokkr
         */
         [[nodiscard]] TypeName ManhattanDistance(const Vector2<TypeName>& other) const
         {
-            return std::abs(m_x - other.m_x) + std::abs(m_y - other.m_y);
+            // If m_x is greater, we subtract normally. m_x - other.m_x
+            // If other.m_x greater, we subtract in reverse. other.m_x - m_x
+            TypeName dx = (m_x > other.m_x) ? (m_x - other.m_x) : (other.m_x - m_x);
+            TypeName dy = (m_y > other.m_y) ? (m_y - other.m_y) : (other.m_y - m_y);
+            return dx + dy;
+        }
+
+        // if the vector is a zero vector
+        [[nodiscard]] bool IsZero(TypeName tolerance = kTolerance) const
+        {
+            return std::abs(m_x) < tolerance && std::abs(m_y) < tolerance;
+        }
+
+        [[nodiscard]] static Vector2<TypeName> ZeroVector()
+        {
+            return Vector2<TypeName>(0, 0);
+        }
+
+        [[nodiscard]] static Vector2<TypeName> MaxVector()
+        {
+            return Vector2<TypeName>(std::numeric_limits<TypeName>::max(), std::numeric_limits<TypeName>::max());  // Max
+        }
+
+        [[nodiscard]] TypeName DistanceTo(const Vector2<TypeName>& other) const
+        {
+            return (*this - other).Length();
         }
 
         // convert the vector to a string format Vector2(x,y)

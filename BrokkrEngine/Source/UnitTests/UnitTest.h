@@ -257,6 +257,45 @@ namespace Brokkr
             return rotated.ApproximatelyEquals(expected, kTolerance);
         }
 
+        static bool TestLinearSpace()
+        {
+            const Vector2<float> start(0.0f, 0.0f);
+            const Vector2<float> end(10.0f, 10.0f);
+            constexpr int kNumSteps = 5;
+            constexpr float kTolerance = 0.0001f;
+
+            const std::vector<Vector2<float>> result = Vector2<float>::LinearSpace(start, end, kNumSteps);
+
+            // Expected 
+            const std::vector<Vector2<float>> expected = 
+            {
+                {0.0f, 0.0f},
+                {2.5f, 2.5f},
+                {5.0f, 5.0f},
+                {7.5f, 7.5f},
+                {10.0f, 10.0f}
+            };
+
+            // Check if all values equal
+            for (size_t i = 0; i < result.size(); ++i)
+            {
+                if (!result[i].ApproximatelyEquals(expected[i], kTolerance))
+                    return false;
+            }
+
+            return true;
+        }
+
+        static bool TestManhattanDistance()
+        {
+            const Vector2<int> v1(2, 3);
+            const Vector2<int> v2(5, 7);
+
+            // (2 - 5) + (3 - 7) = 3 + 4 = takes 7 steps if you can only move horizontally and vertically
+            constexpr int kExpected = 7; 
+            return v1.ManhattanDistance(v2) == kExpected;
+        }
+
     public:
 
         static void RegisterEngineTests(UnitTestSystem* pTestSystem)
@@ -280,6 +319,8 @@ namespace Brokkr
             pTestSystem->AddTest("Vector2 TestRotateAround", TestRotateAround);
             pTestSystem->AddTest("Vector2 TestRotateDegrees", TestRotateDegrees);
             pTestSystem->AddTest("Vector2 TestApplyRotationMatrix", TestApplyRotationMatrix);
+            pTestSystem->AddTest("Vector2 TestLinearSpace", TestLinearSpace);
+            pTestSystem->AddTest("Vector2 TestManhattanDistance", TestManhattanDistance);
         }
     };
 
