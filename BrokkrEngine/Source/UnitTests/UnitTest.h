@@ -298,7 +298,7 @@ namespace Brokkr
 
     public:
 
-        static void RegisterEngineTests(UnitTestSystem* pTestSystem)
+        static void RegisterEngineVector2Tests(UnitTestSystem* pTestSystem)
         {
             pTestSystem->AddTest("Vector2 Addition", TestVector2Addition);
             pTestSystem->AddTest("Vector2 Normalization", TestVector2Normalization);

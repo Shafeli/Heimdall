@@ -37,7 +37,7 @@ public:
 		CoreSystems::Initialize();
 
 
-		Brokkr::UnitTest::RegisterEngineTests(m_pUnitTestSystem);
+		Brokkr::UnitTest::RegisterEngineVector2Tests(m_pUnitTestSystem);
 	}
 
 	void RunTests()
