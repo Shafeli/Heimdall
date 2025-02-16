@@ -91,7 +91,7 @@ void GameCoreSystem::Destroy()
 int main()
 {
 
-	std::cout << "Welcome to Val Editor!\n";
+	std::cout << "Welcome to Val Game!\n";
 	auto game = GameCoreSystem();
 
 	game.Build();
