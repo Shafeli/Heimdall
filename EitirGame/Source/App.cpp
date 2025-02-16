@@ -17,7 +17,7 @@ class GameCoreSystem final : public Brokkr::CoreSystems
 	Brokkr::AssetManager* m_pAssetManager = nullptr;
 	Brokkr::SceneManager* m_pSceneManager = nullptr;
 	Brokkr::UnitTestSystem* m_pUnitTestSystem = nullptr;
-	// Brokkr::GameEntityManager* m_pEntityManager = nullptr;
+	Brokkr::GameEntityManager* m_pEntityManager = nullptr;
 	Brokkr::PhysicsManager* m_pPhysicsManager2D = nullptr;
 	Brokkr::XMLManager* m_pXmlManager = nullptr;
 
@@ -29,7 +29,7 @@ public:
 		m_pSceneManager = AddCoreSystem<Brokkr::SceneManager>();
 		m_pPhysicsManager2D = AddCoreSystem<Brokkr::PhysicsManager>();
 		m_pSdlWindowManager = AddCoreSystem<Brokkr::SDLWindowSystem>();
-		// m_pEntityManager = AddCoreSystem<Brokkr::GameEntityManager>();
+		m_pEntityManager = AddCoreSystem<Brokkr::GameEntityManager>();
 
 		auto pMainWindow = m_pSdlWindowManager->AddWindow<Brokkr::SDLWindow>("GameWindow", 1024, 768);
 		auto pMainRenderer = m_pSdlWindowManager->GetRendererForWindow(pMainWindow);
@@ -49,7 +49,7 @@ public:
 		m_pAssetManager->Init();
 		// m_pSceneManager->Init();
 		m_pPhysicsManager2D->Init();
-		// m_pEntityManager->Init();
+		m_pEntityManager->Init();
 		Brokkr::UnitTest::RegisterEngineVector2Tests(m_pUnitTestSystem);
 
 	}
@@ -70,10 +70,10 @@ public:
 			// m_pInputManager->Update(&windowEvent); // update input system
 
 			m_pSceneManager->UpdateActiveState();
-			// m_pEntityManager->UpdateEntities();
+			m_pEntityManager->UpdateEntities();
 			m_pPhysicsManager2D->ProcessUpdate();
-			// m_pEntityManager->LateUpdateEntities();
-			// m_pEntityManager->RenderEntities();
+			m_pEntityManager->LateUpdateEntities();
+			m_pEntityManager->RenderEntities();
 		}
 
 	}

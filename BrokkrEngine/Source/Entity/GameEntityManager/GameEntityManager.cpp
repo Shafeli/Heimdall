@@ -137,7 +137,7 @@ std::list<Brokkr::GameEntity*> Brokkr::GameEntityManager::ConstructWithLocation(
 {
     if (!m_pXmlManager) // get xml Manager
     {
-        m_pXmlManager = m_pCoreManager->GetCoreSystem<AssetManager>()->GetAssetSystem<XMLManager>();
+        m_pXmlManager = m_pCoreManager->AddCoreSystem<XMLManager>();
     }
 
     if (!m_pEntityParser) // get the parser 
@@ -187,7 +187,7 @@ Brokkr::GameEntity* Brokkr::GameEntityManager::Construct(const char* prefabName,
 {
     if (!m_pXmlManager) // get xml Manager
     {
-        m_pXmlManager = m_pCoreManager->GetCoreSystem<AssetManager>()->GetAssetSystem<XMLManager>();
+        m_pXmlManager = m_pCoreManager->AddCoreSystem<XMLManager>();
     }
 
     if (!m_pEntityParser) // get the parser 

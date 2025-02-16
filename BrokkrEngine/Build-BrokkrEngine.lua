@@ -9,9 +9,9 @@ files
 {
     "Source/**.h",
     "Source/**.cpp",
-    "lib/TinyXML/**.h",
-    "lib/TinyXML/**.cpp",
-    "lib/GAP311/**.hpp",
+    "../lib/TinyXML/**.h",
+    "../lib/TinyXML/**.cpp",
+    "../lib/GAP311/**.hpp",
 }
 
 includedirs

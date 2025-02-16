@@ -8,8 +8,6 @@ staticruntime "off"
 files {
     "Source/**.h",
     "Source/**.cpp",
-    "lib/TinyXML/**.h",
-    "lib/TinyXML/**.cpp",
 }
 
 includedirs
