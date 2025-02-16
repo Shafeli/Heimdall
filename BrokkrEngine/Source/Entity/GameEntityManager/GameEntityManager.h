@@ -52,6 +52,7 @@ namespace Brokkr
         // Object Update Components
         ///////////////////////////////////////////
         void UpdateEntities() const;
+        void LateUpdateEntities();
 
         // Object Rendering
         ///////////////////////////////////////////

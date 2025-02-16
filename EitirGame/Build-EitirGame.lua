@@ -5,11 +5,18 @@ cppdialect "C++17"
 targetdir "Binaries/%{cfg.buildcfg}"
 staticruntime "off"
 
-files { "Source/**.h", "Source/**.cpp" }
+files {
+    "Source/**.h",
+    "Source/**.cpp",
+    "lib/TinyXML/**.h",
+    "lib/TinyXML/**.cpp",
+}
 
 includedirs
 {
     "Source",
+
+    "../lib/TinyXML",         -- Local TinyXML headers
     "../BrokkrEngine/Source", -- Include BrokkrEngine
     "../BrokkrEngine/Source/Primitives/",
 }

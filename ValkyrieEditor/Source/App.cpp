@@ -8,7 +8,7 @@
 #include "AssetManager/AssetManager.h"
 #include "UnitTests/UnitTest.h"
 
-class EditorCoreSystem final : public Brokkr::CoreSystems
+class GameCoreSystem final : public Brokkr::CoreSystems
 {
 	Brokkr::SDLWindowSystem* m_pSdlWindowManager = nullptr;
 	Brokkr::AssetManager* m_pAssetManager = nullptr;
@@ -61,7 +61,7 @@ public:
 };
 
 
-void EditorCoreSystem::Destroy()
+void GameCoreSystem::Destroy()
 {
 	CoreSystems::Destroy();
 	m_pSdlWindowManager = nullptr;
@@ -71,7 +71,7 @@ int main()
 {
 
 	std::cout << "Welcome to Val Editor!\n";
-	auto Editor = EditorCoreSystem();
+	auto Editor = GameCoreSystem();
 
 	Editor.Build();
 	Editor.Initialize();

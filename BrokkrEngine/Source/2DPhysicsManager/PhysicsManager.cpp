@@ -6,11 +6,7 @@
 
 void Brokkr::PhysicsManager::Init()
 {
-    // Event Handler for Update Complete event
-    m_updateHandler.first = Event::kPriorityHigh; // This needs to happen before colliders update to future
-    m_updateHandler.second = [this](auto&& event) { ProcessUpdate(std::forward<decltype(event)>(event)); };
 
-    m_pEventManager->AddHandler("PhysicsUpdate", m_updateHandler);
 }
 
 Brokkr::Collider* Brokkr::PhysicsManager::CreateCollider(const Rectangle<float>& rect, int ownerID, bool isMoveable, int overLap)
@@ -299,7 +295,7 @@ void Brokkr::PhysicsManager::AbsoluteMove(Collider* collider, const Vector2<floa
     collider->AbsoluteMoveBlockFrameAdjustments(move);
 }
 
-void Brokkr::PhysicsManager::ProcessUpdate([[maybe_unused]] const Event& event)
+void Brokkr::PhysicsManager::ProcessUpdate()
 {
     // Create a temporary queue to hold the colliders to process
     std::queue<Collider*> tempQueue;

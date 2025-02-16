@@ -38,7 +38,7 @@ namespace Brokkr
         bool m_TTF_Systems = false;
         bool m_SceneManagerSystem = false;
 
-        SceneManager* m_pSceneManger = nullptr;
+        SceneManager* m_pSuperSceneManager = nullptr;
 
         int frameCount = 0;
         std::vector<std::unique_ptr<System>> m_pCoreSubsystems;

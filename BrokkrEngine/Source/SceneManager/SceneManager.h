@@ -34,14 +34,17 @@ namespace Brokkr
         }
 
         virtual ~SceneManager() override;
+
+        [[nodiscard]] Scene* GetActiveState();
+        void UpdateActiveState() { m_pActiveState->Update(); }
+
         void AddState(const std::string& stateIdentifier, std::unique_ptr<Scene> newState);
         void RemoveState(const std::string& stateIdentifier);
         void SetActiveState(const std::string& stateIdentifier);
         void ResetState(const std::string& stateIdentifier);
 
         virtual void Destroy() override;
-        [[nodiscard]] Scene* GetActiveState();
-
+        
     protected: // Only calls these two in core main game loop
         friend class CoreSystems;
         void ProcessStateChange();

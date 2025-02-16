@@ -55,7 +55,7 @@ void Brokkr::CoreSystems::Update()
 
     if (m_SceneManagerSystem)
     {
-        m_pSceneManger->ProcessStateChange();
+        m_pSuperSceneManager->ProcessStateChange();
         // m_pSceneManger->
     }
 }
@@ -103,7 +103,7 @@ void Brokkr::CoreSystems::Initialize()
 
     if (IsSystemAvailable<Brokkr::SceneManager>())
     {
-        m_pSceneManger = GetCoreSystem<SceneManager>();
+        m_pSuperSceneManager = GetCoreSystem<SceneManager>();
         m_SceneManagerSystem = true;
     }
 }

@@ -85,6 +85,14 @@ void Brokkr::GameEntityManager::UpdateEntities() const
     }
 }
 
+void Brokkr::GameEntityManager::LateUpdateEntities()
+{
+    for (auto& pEntity : m_entities)
+    {
+        pEntity->LateUpdate();
+    }
+}
+
 void Brokkr::GameEntityManager::RenderEntities() const
 {
     for (auto& pEntity : m_entities)

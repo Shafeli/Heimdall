@@ -23,6 +23,7 @@ namespace Brokkr
 
         GameEntity(const GameEntity& other) = delete;
         GameEntity& operator=(const GameEntity& other) = delete;
+
         GameEntity(GameEntity&& other) noexcept = default;
         GameEntity& operator=(GameEntity&& other) noexcept = default;
 
@@ -35,6 +36,7 @@ namespace Brokkr
         // Object Update Components
         ///////////////////////////////////////////
         void Update() const;
+        void LateUpdate();
 
         // Object Rendering / Maybe keep will see want this gone as well
         ///////////////////////////////////////////

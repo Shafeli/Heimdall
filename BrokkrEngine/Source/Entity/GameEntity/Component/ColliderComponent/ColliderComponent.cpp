@@ -1,11 +1,12 @@
 #include "ColliderComponent.h"
 #include <string>
-#include <tinyxml2.h>
+#include <Tinyxml2.h>
 
 #include "GameEntity.h"
 #include "TransformComponent.h"
-#include "XMLManager/Parsers/EntityXMLParser/EntityXMLParser.h"
+
 #include "EventManager/Event/PayloadComponent/CollisionPayload/CollisionPayload.h"
+#include "XMLManager/Parsers/EntityXMLParser/EntityXMLParser.h"
 
 /*
 #define BROKKR_OVERLAP_STATIC 0

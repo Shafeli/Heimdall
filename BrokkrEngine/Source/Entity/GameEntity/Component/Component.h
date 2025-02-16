@@ -23,6 +23,7 @@ namespace Brokkr
         virtual void Detach() {}   // : This method could be called when the component is detached from an entity or removed from the game world.
         virtual void Enable() {}   // : This method could be called when the component is enabled.
         virtual void Disable() {}  // : This method could be called when the component is disabled.
+        virtual void LateUpdate() {}
     };
 }
 

@@ -91,6 +91,7 @@ namespace Brokkr
             m_displacements.clear();
 
         }
+
         void init(EventManager* pEventManager)
         {
             m_eventString = "UpdatePosition" + std::to_string(m_ownerID);
@@ -174,7 +175,7 @@ namespace Brokkr
         void AbsoluteMove(Collider* collider, const Vector2<float>& move);
 
         // Reaction to the update requests
-        void ProcessUpdate([[maybe_unused]] const Event& event);
+        void ProcessUpdate();
 
     private:
 
