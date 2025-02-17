@@ -3,5 +3,6 @@
 
 class AgentController : public Brokkr::Component
 {
+    //
 };
 

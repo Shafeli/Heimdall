@@ -3,5 +3,6 @@
 
 class KinematicComponent : public Brokkr::Component
 {
+    //
 };
 
