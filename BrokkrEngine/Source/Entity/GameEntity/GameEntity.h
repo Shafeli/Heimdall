@@ -38,10 +38,6 @@ namespace Brokkr
         void Update() const;
         void LateUpdate();
 
-        // Object Rendering / Maybe keep will see want this gone as well
-        ///////////////////////////////////////////
-        void Render() const;
-
         // Object Disable
         ///////////////////////////////////////////
         void Disable();

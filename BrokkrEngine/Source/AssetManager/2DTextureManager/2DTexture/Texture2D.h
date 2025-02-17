@@ -31,7 +31,7 @@ namespace Brokkr
         void ResetTextureColor() const;
         [[nodiscard]] Vector2<int> GetSize() const { return m_size; }
 
-        SDL_Texture* LoadTexture();
+        SDL_Texture* GetSDLTexture();
         bool DestroyTexture();
     };
 

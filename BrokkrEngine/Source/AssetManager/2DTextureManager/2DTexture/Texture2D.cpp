@@ -7,7 +7,7 @@ Brokkr::Texture2D::Texture2D(const std::string& texturePath, SDLRenderer* pRende
     :m_texturePath(texturePath)
     ,m_pRenderer(pRenderer)
 {
-    LoadTexture();
+    GetSDLTexture();
 }
 
 Brokkr::Texture2D::Texture2D(const void* pData, size_t size, SDLRenderer* pRenderer)
@@ -49,7 +49,7 @@ void Brokkr::Texture2D::ResetTextureColor() const
     SDL_SetTextureColorMod(m_pTexture, 255, 255, 255);
 }
 
-SDL_Texture* Brokkr::Texture2D::LoadTexture()
+SDL_Texture* Brokkr::Texture2D::GetSDLTexture()
 {
     if (m_pTexture)
         return m_pTexture;

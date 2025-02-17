@@ -3,6 +3,7 @@
 #include "ColliderComponent.h"
 #include "tinyxml2.h"
 #include "TransformComponent.h"
+#include "Component/RenderComponent/SpriteComponent.h"
 #include "Core/Core.h" 
 #include "Entity/GameEntityManager/GameEntityManager.h"
 
@@ -12,8 +13,7 @@ Brokkr::EntityXMLParser::EntityXMLParser(CoreSystems* pCoreSystems): XMLParser(p
     // Building functions
     ColliderComponent::RegisterCreationFunction(this);
     TransformComponent::RegisterCreationFunction(this);
-
-
+    SpriteComponent::RegisterCreationFunction(this);
 }
 
 // TODO: Build a abstract factory so components can register building methods 

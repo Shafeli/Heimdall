@@ -34,7 +34,6 @@ namespace Brokkr
         virtual bool Init() override;
         virtual void Update() override;
         virtual void Destroy() override;
-        virtual void Render() override;
 
         void SetStartingPos(Vector2<float> newStart) { m_startPos = newStart; }
 

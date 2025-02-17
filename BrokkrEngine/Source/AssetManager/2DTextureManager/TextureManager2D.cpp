@@ -89,5 +89,5 @@ void Brokkr::TextureManager2D::Init(SDLWindow* window, SDLRenderer* render)
 
 SDL_Texture* Brokkr::TextureManager2D::GetTexture(const std::string& textureName) const
 {
-    return this->m_pImageTexture.at(textureName)->LoadTexture();
+    return this->m_pImageTexture.at(textureName)->GetSDLTexture();
 }

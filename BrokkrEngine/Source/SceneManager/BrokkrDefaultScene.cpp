@@ -4,11 +4,15 @@ void Brokkr::BrokkrDefaultScene::Init()
 {
 }
 
-void Brokkr::BrokkrDefaultScene::ResetStateValues()
+void Brokkr::BrokkrDefaultScene::Update()
 {
 }
 
-void Brokkr::BrokkrDefaultScene::Update()
+void Brokkr::BrokkrDefaultScene::Exit()
+{
+}
+
+void Brokkr::BrokkrDefaultScene::Enter()
 {
 }
 

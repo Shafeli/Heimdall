@@ -4,6 +4,7 @@
 #include <GameEntity.h>
 #include <TransformComponent.h>
 #include "AssetManager/AssetManager.h"
+#include "RenderComponent/SpriteComponent.h"
 #include "XMLManager/Parsers/EntityXMLParser/EntityXMLParser.h"
 #include "XMLManager/Parsers/PositionDataParser/PositionDataParser.h"
 
@@ -30,6 +31,11 @@ Brokkr::GameEntityManager::~GameEntityManager()
 void Brokkr::GameEntityManager::Init()
 {
     m_pPhysicsManager = m_pCoreManager->GetCoreSystem<PhysicsManager>();
+
+    if (!m_pXmlManager) // get xml Manager
+    {
+        m_pXmlManager = m_pCoreManager->GetCoreSystem<XMLManager>();
+    }
 
 }
 
@@ -95,7 +101,7 @@ void Brokkr::GameEntityManager::LateUpdateEntities()
 
 void Brokkr::GameEntityManager::RenderEntities() const
 {
-    for (auto& pEntity : m_entities)
+    for (auto& pEntity : m_pRenderComponents)
     {
         pEntity->Render();
     }
@@ -137,7 +143,7 @@ std::list<Brokkr::GameEntity*> Brokkr::GameEntityManager::ConstructWithLocation(
 {
     if (!m_pXmlManager) // get xml Manager
     {
-        m_pXmlManager = m_pCoreManager->AddCoreSystem<XMLManager>();
+        m_pXmlManager = m_pCoreManager->GetCoreSystem<XMLManager>();
     }
 
     if (!m_pEntityParser) // get the parser 
@@ -187,7 +193,7 @@ Brokkr::GameEntity* Brokkr::GameEntityManager::Construct(const char* prefabName,
 {
     if (!m_pXmlManager) // get xml Manager
     {
-        m_pXmlManager = m_pCoreManager->AddCoreSystem<XMLManager>();
+        m_pXmlManager = m_pCoreManager->GetCoreSystem<XMLManager>();
     }
 
     if (!m_pEntityParser) // get the parser 
@@ -197,6 +203,11 @@ Brokkr::GameEntity* Brokkr::GameEntityManager::Construct(const char* prefabName,
 
     const auto init = m_pEntityParser->BuildEntity(prefabName, m_pXmlManager->Get(fileName));
     init->Init();
+
+    if (auto spriteComponent = init->GetComponent<SpriteComponent>()) 
+    {
+        m_pRenderComponents.emplace_back(spriteComponent);
+    }
 
     return init;
 }

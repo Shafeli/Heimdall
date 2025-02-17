@@ -14,6 +14,7 @@
 
 namespace Brokkr
 {
+    class SpriteComponent;
     class PhysicsManager;
     class GameEntity;
     class EntityXMLParser;
@@ -24,8 +25,8 @@ namespace Brokkr
     {
         std::vector<GameEntity*> m_entities;
         std::unordered_map<int, size_t> m_entityLookup;
+        std::vector<SpriteComponent*> m_pRenderComponents;
 
-        // Prefab system needs to know the parsers to get the data
         EntityXMLParser* m_pEntityParser = nullptr;
         PositionDataParser* m_pPositionParser = nullptr;
         XMLManager* m_pXmlManager = nullptr;

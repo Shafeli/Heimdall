@@ -36,11 +36,6 @@ void Brokkr::TransformComponent::Destroy()
 
 }
 
-void Brokkr::TransformComponent::Render()
-{
-    //
-}
-
 void Brokkr::TransformComponent::AddCollider(ColliderComponent* pColliderComponent)
 {
     m_collider = pColliderComponent;

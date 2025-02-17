@@ -13,8 +13,7 @@ namespace Brokkr
     // * Redo adding Scenes to temple-ted system
     class SceneManager final : public System
     {
-        EventManager* m_pEventManager = nullptr;
-
+        GameEntityManager* m_pEntityManager = nullptr;
         std::unordered_map<std::string, std::unique_ptr<Scene>> m_states;
         std::string m_pActiveStateKey;
         std::string m_pendingStateKey;
@@ -26,13 +25,11 @@ namespace Brokkr
         explicit SceneManager(CoreSystems* pCoreManager)
             : System(pCoreManager)
         {
-            //
-            m_pEventManager = pCoreManager->GetCoreSystem<EventManager>();
-
             AddState("BrokkrEngineDefault", std::make_unique<BrokkrDefaultScene>(pCoreManager));
             SetActiveState("BrokkrEngineDefault");
         }
 
+        void Init();
         virtual ~SceneManager() override;
 
         [[nodiscard]] Scene* GetActiveState();

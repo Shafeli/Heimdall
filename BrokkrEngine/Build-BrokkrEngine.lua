@@ -24,6 +24,7 @@ includedirs
     "Source/Entity/GameEntity/Component",
     "Source/Entity/GameEntity/Component/TransformComponent",
     "Source/Entity/GameEntity/Component/ColliderComponent",
+    "Source/Entity/GameEntity/Component/RenderComponent/SpriteComponent",
     "../lib/SDL2/include",      -- SDL2 headers
     "../lib/SDL_image/include", -- SDL_image headers
     "../lib/SDL_mixer/include", -- SDL_mixer headers

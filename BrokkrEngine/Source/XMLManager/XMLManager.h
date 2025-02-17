@@ -31,7 +31,7 @@ namespace Brokkr
     class XMLManager final : public System
     {
         std::vector<std::unique_ptr<XMLParser>> m_parsers;
-        std::unordered_map<std::string, const char*> m_xmlPaths;
+        std::unordered_map<std::string, std::string> m_xmlPaths;
 
     public:
         XMLManager(CoreSystems* pCoreManager)

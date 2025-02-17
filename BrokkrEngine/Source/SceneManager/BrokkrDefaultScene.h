@@ -14,8 +14,9 @@ namespace Brokkr
         }
 
         virtual void Init() override;
-        virtual void ResetStateValues() override;
         virtual void Update() override;
+        virtual void Exit() override;
+        virtual void Enter() override;
         virtual void Destroy() override;
     };
 

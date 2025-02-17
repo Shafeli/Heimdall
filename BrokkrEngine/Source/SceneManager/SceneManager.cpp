@@ -3,6 +3,13 @@
 #include <cassert>
 #include <string>
 
+#include "Entity/GameEntityManager/GameEntityManager.h"
+
+void Brokkr::SceneManager::Init()
+{
+    m_pEntityManager = m_pCoreManager->GetCoreSystem<GameEntityManager>();
+}
+
 Brokkr::SceneManager::~SceneManager()
 {
     Destroy();
@@ -25,7 +32,7 @@ void Brokkr::SceneManager::RemoveState(const std::string& stateIdentifier)
             if (m_pActiveStateKey == stateIdentifier) // Check if the state being removed is the active state
             {
                 // Pause the active state
-                m_pActiveState->Pause();
+                m_pActiveState->Exit();
 
                 if (m_states.size() > 1) // Check if there are any other states in the map
                 {
@@ -34,7 +41,7 @@ void Brokkr::SceneManager::RemoveState(const std::string& stateIdentifier)
                     // Set the next state in the map as the new active state
                     m_pActiveStateKey = nextIterator->first;
                     m_pActiveState = nextIterator->second.get();
-                    m_pActiveState->Resume();
+                    m_pActiveState->Enter();
                 }
                 else // If there are no other states in the map, set the active state to null
                 {
@@ -69,33 +76,10 @@ void Brokkr::SceneManager::SetActiveState(const std::string& stateIdentifier)
         assert(false); // assertion fail
     }
 
-    /*if (m_pActiveState != nullptr)
-    {
-        // pause current state
-        m_pActiveState->Pause();
-    }*/
-
-    m_pEventManager->DumpEvents();
     // set new active state key
     m_pendingStateKey = stateIdentifier;
 
     m_isReplacing = true;
-}
-
-void Brokkr::SceneManager::ResetState(const std::string& stateIdentifier)
-{
-    const auto stateIterator = m_states.find(stateIdentifier);
-
-    if (stateIterator == m_states.end())
-    {
-        const std::string error = "State key: " + stateIdentifier + " does not exist";
-        assert(false); // assertion fail
-    }
-
-    if (m_states[stateIdentifier] != nullptr)
-    {
-        m_states[stateIdentifier]->ResetStateValues();
-    }
 }
 
 void Brokkr::SceneManager::ProcessStateChange()
@@ -109,7 +93,8 @@ void Brokkr::SceneManager::ProcessStateChange()
             if (m_pActiveState != nullptr)
             {
                 // pause current state
-                m_pActiveState->Pause();
+                m_pActiveState->Exit();
+                m_pEntityManager->ClearEntities();
             }
 
             // set new active state key
@@ -118,7 +103,7 @@ void Brokkr::SceneManager::ProcessStateChange()
             // set new active state
             m_pActiveState = stateIter->second.get();
 
-            m_pActiveState->Resume();
+            m_pActiveState->Enter();
 
             m_isReplacing = false;
         }

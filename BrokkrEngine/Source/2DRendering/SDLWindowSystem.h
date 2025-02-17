@@ -124,6 +124,9 @@ namespace Brokkr
             m_pWindows.clear();
         }
 
+        void Render();
+        void ClearRenders();
+
     private:
 
         // Add a new renderer for a window

@@ -1,0 +1,21 @@
+<Entity>
+
+    <GameEntity name="Player">
+        <TransformComponent x="0" y="0" height="32" width="32" />
+        <SpriteComponent texture="Player" active="true" center="true" />
+        <ColliderComponent overlap="all" passable="yes" />
+    </GameEntity>
+
+    <GameEntity name="AI">
+        <TransformComponent x="0" y="0" height="32" width="32" />
+        <SpriteComponent texture="AI" active="true" center="true" />
+        <ColliderComponent overlap="all" passable="yes" />
+    </GameEntity>
+
+    <GameEntity name="Collider">
+        <TransformComponent x="0" y="0" height="32" width="32" />
+        <SpriteComponent texture="Square" active="false" center="false" />
+        <ColliderComponent overlap="dynamic" passable="no" />
+    </GameEntity>
+
+</Entity>

@@ -37,16 +37,6 @@ void Brokkr::GameEntity::LateUpdate()
     }
 }
 
-void Brokkr::GameEntity::Render() const
-{
-    if (!isEnabled) return;
-
-    for (size_t i = 0; i < m_pComponents.size(); ++i)
-    {
-        m_pComponents[i]->Render();
-    }
-}
-
 void Brokkr::GameEntity::Disable()
 {
     for (size_t i = 0; i < m_pComponents.size(); ++i)

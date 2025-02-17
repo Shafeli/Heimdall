@@ -36,7 +36,7 @@ const char* Brokkr::XMLManager::Get(const std::string& fileName)
 {
     if (const auto& xml = m_xmlPaths.find(fileName); xml != m_xmlPaths.end())
     {
-        return xml->second;
+        return xml->second.c_str();
     }
 
     return nullptr; // File not found

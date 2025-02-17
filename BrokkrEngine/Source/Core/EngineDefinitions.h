@@ -6,6 +6,9 @@ namespace Brokkr
 {
     struct EngineDefinitions
     {
+        // Misc System
+        inline static const char* GAME_WINDOW_NAME = "GameWindow";
+
         // File Paths
         inline static const char* CONFIG_FILE = "Config/SystemConfig.xml";
         inline static const char* ASSETS_PATH = "Assets/";

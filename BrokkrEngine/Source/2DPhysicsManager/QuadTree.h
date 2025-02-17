@@ -21,6 +21,7 @@ namespace Brokkr
 
         NodeDataContainer m_colliderNodes;
         std::vector<QuadTree> m_leafs;
+        NodeDataContainer m_tempNodes;
 
     public:
         QuadTree() = default;

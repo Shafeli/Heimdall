@@ -79,20 +79,21 @@ void Brokkr::ColliderComponent::Update()
 
 void Brokkr::ColliderComponent::Destroy()
 {
-    m_pPhysicsManager->Remove(m_transform);
+    //TODO: FIX this later
+    // m_pPhysicsManager->Remove(m_transform);
 }
 
-void Brokkr::ColliderComponent::Render()
-{
-    Component::Render();
-
-#if DEBUG_RENDER
-    //auto colorHax = BasicColor();
-    //colorHax.RandomColors();
-    //m_pRenderPipeline->QueueToRender(GetTransform(), colorHax, 0.0f);
-#endif
-
-}
+//void Brokkr::ColliderComponent::Render()
+//{
+//    Component::Render();
+//
+//#if DEBUG_RENDER
+//    //auto colorHax = BasicColor();
+//    //colorHax.RandomColors();
+//    //m_pRenderPipeline->QueueToRender(GetTransform(), colorHax, 0.0f);
+//#endif
+//
+//}
 
 void Brokkr::ColliderComponent::BlockMove(const Event& event)
 {

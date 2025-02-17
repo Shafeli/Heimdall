@@ -10,7 +10,7 @@
 
 namespace Brokkr
 {
-    class ScriptSystemManager;
+
     class CoreSystems;
     class GameEntityManager;
 
@@ -29,27 +29,10 @@ namespace Brokkr
         /////////////////////////////////////////////////
         virtual ~Scene() = default;
         virtual void Init() = 0;
-        virtual void ResetStateValues() = 0;
         virtual void Update() = 0;
-
-        void Draw() const
-        {
-            // TODO: Research Hardware instancing & software instancing
-            //if (m_pRenderPipeline)
-            //    m_pRenderPipeline->ProcessRenderQueue(); // Draws window
-            //else
-            //{
-            //    m_stateLog.Log(Logger::LogLevel::kError, "RenderPipeline not loaded...");
-            //}
-        }
-
+        virtual void Exit() = 0;
+        virtual void Enter() = 0;
         virtual void Destroy() = 0;
-
-        /////////////////////////////////////////////////
-        // optional state methods
-        /////////////////////////////////////////////////
-        virtual void Pause() {}
-        virtual void Resume() {}
 
     protected:
 
