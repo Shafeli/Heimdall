@@ -1,0 +1,208 @@
+// Demo 2.1
+
+//---------------------------------------------------------------------------------------------------------------------
+// Assignment Math Constraints:
+//      -Definitely Okay:   sin, cos, tan, asin, acos, atan, sqrt, mod
+//      -Fine for Cowards:  clamp, lerp
+// 
+// Note: Data structures are fine!
+//---------------------------------------------------------------------------------------------------------------------
+
+
+//---------------------------------------------------------------------------------------------------------------------
+// Data
+//
+// Note: In general I will use the following units:
+//      -Radians for angles
+//      -Meters for distance
+//      -Seconds for time
+//---------------------------------------------------------------------------------------------------------------------
+
+// Component?
+// Unity's tranform?
+class Location
+    position: Vec3
+    orientation: float  // probably radians
+
+class Kinematic
+    // current values
+    &currLocation: Location  // reference; not owned by us
+    velocity: Vec3  // direction of movement and speed
+    acceleration: Vec3
+    angularVelocity: float  // radians per second
+    angularAcceleration: float
+
+    // max values (tuned)
+    maxSpeed: float  // can also be set by gameplay
+    maxAcceleration: float
+    maxAngularVelocity: float
+    maxcAngularAcceleration: float
+
+    function UpdateLocation(deltaTime)
+        // update position
+        currLocation.position += velocity * deltaTime
+
+        // update velocity based on acceleration
+        velocity += acceleration * deltaTime
+
+        // clamp velocity
+        if velocity.Length() > maxSpeed
+            velocity = velocity.Normalized() * maxSpeed
+
+        // update orientation
+        currLocation.orientation += angularVelocity * deltaTime
+        currLocation.orientation = std::fmod(orientation, 2 * PI)  // wrap orientation so that 0 <= orientation <= 2PI
+
+        // update angular velocity based on acceleration
+        angularVelocity += angularAcceleration
+
+        // clamp
+        if angularVelocity > maxAngularVelocity
+            angularVelocity = maxAngularVelocity
+
+        // If you're using another engine, teleport here.  i.e.
+        // agent.gameObject.transformComponent.Position = new Vector3(currLocation.position.x, currLocation.position.y, currLocation.position.z)
+        // same with orientation
+
+    // Note: For these setter functions, you need to take into account negative values.  The easy solution to 
+    // interpret the max values as absolute values.  So the actual range would be from -maxAcceleration to 
+    // maxAcceleration.
+    function SetLinearAcceleration(newLinearAcceleration)
+        clamp newLinearAcceleration to maxAcceleration
+        acceleration = newLinearAcceleration
+
+    function SetAngularAcceleration(newAngularAcceleration)
+        clamp newAngularAcceleration to maxAcceleration
+        angularAcceleration = newAngularAcceleration
+
+    function Stop()
+        velocity = (0,0,0)
+        angularVelocity = 0
+        acceleration = (0,0,0)
+        angularAcceleration = 0
+
+//---------------------------------------------------------------------------------------------------------------------
+// Steering Behaviors
+//---------------------------------------------------------------------------------------------------------------------
+class SteeringBehavior
+    &agent  // back reference, aka owner
+
+    abstract function Update(deltaTime)
+
+class TargetedSteeringBehavior : SteeringBehavior
+    target: Vec3
+    //target: GameObject
+
+class SeekAndFleeBehavior : TargetedSteeringBehavior
+    override function Update(deltaTime)
+        // get the direction
+        direction = GetInitialDirection()
+
+        // adjust the length of the vector to match the acceleration
+        direction *= agent.kinematic.maxAcceleration
+
+        // Snap the agent's orientation to the direction we're moving.  Since the velocity can only change small 
+        // amounts over time, the agent's rotation won't look *too* fake.  Of course, we could take advantage of 
+        // the angular velocity / angular acceleration if we wanted to.
+        agent.location.FaceDirection(direction)  // Math
+        agent.kinematic.SetLinearAcceleration(direction)
+        //agent.kinematic.SetAngularAcceleration(0)
+
+    abstract function GetInitialDirection()
+
+class SeekBehavior : SeekAndFleeBehavior
+    override function GetInitialDirection()
+        delta = target - agent.location.position
+        return delta.Normalized()
+
+class FleeBehavior : SeekAndFleeBehavior
+    override function GetInitialDirection()
+        delta = agent.location.position - target
+        return delta.Normalized()
+
+class Arrive : TargetedSteeringBehavior
+    targetRadius: float  // the "we have arrived" radius
+    desiredSpeed: float
+
+    slowRadius  // radius until we hit the target speed
+    timeToTarget = 0.1  // timew until we hit the target speed
+
+    override function Update(deltaTime)
+        // distance
+        delta = target - agent.location.position
+        distance = delta.Length()
+
+        // Case 1: We're at the target, so stop.
+        if distance < targetRadius
+            agent.kinematic.Stop()
+            return
+
+        // calculate direction of movement
+        targetVelocity = delta
+        targetVelocity.Normalize()
+
+        // Case 2: We're outside of the slow radius, so we go to max speed.
+        if distance > slowRadius
+            targetVelocity *= desiredSpeed
+        
+        // Case 3: We're inside the slow radius
+        else
+            targetVelocity *= desiredSpeed * (distance / slowRadius)
+
+        // calculate the target acceleration based on the target veclocity
+        targetAcceleration = targetVelocity - agent.kinematic.veclocity
+
+        // accelerate and face the direction we're moving
+        agent.location.FaceDirection(direction)
+        agent.kinematic.SetLinearAcceleration(targetAcceleration)
+
+class PursueBehavior : SeekBehavior
+    // This is the target we're actually seeking
+    &trueTarget: Kinematic
+
+    // The maximum amount of time we will assume it takes to get to the target.  If we calculate something larger, 
+    // we use this time instead.  It is measured in seconds.
+    maxPredictionTime  // 30 seconds???
+
+    override function Update(deltaTime)
+        // get distance to target
+        delta = trueTarget.location.position - agent.location.position
+        distance = delta.Length()
+
+        // calculate the intercept
+        agentSpeed = agent.location.velocity.Length()  // consider using max velocity if we're standing still
+        predictedTimeToInercept = 0
+        if agentSpeed <= distance / maxPredictionTime
+            predictedTimeToInercept = maxPredictionTime
+        else
+            predictedTimeToInercept = distance / agentSpeed
+
+        // calculate the predicted position of the target and update our seek target
+        this.target = trueTarget.location.position + (trueTarget.kinematic.velocity * predictedTimeToInercept)  // target is the seek target in SeekFleeBehavior
+
+        // delegate to Seek behavior
+        base.Update(deltaTime)
+
+//---------------------------------------------------------------------------------------------------------------------
+// Agent
+//      -In Unity, this is probably a component (aka MonoBehaviour)
+//      -In Unreal, this could be a component, or could also be the AiController.
+//      -In your own engine, who knows!
+//---------------------------------------------------------------------------------------------------------------------
+class Agent
+    // owns these things
+    location: Location  // in Unity, this is probably the TransformComponent
+    kinematic: Kinematic
+    steeringBehavior: SteeringBehavior = null
+
+    // called by the object system, or engine, or whatever
+    function Update(deltaTime)
+        // Make Decision (modules 4 - 15)
+        //      - get percepts
+        //      - choose action
+        //      - choose a behavior to execute the action
+
+        // execute decision
+        if steeringBehavior
+            steeringBehavior.Update(deltaTime)
+        kinematic.UpdateLocation(deltaTime)
