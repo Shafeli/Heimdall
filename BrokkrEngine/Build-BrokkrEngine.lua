@@ -12,6 +12,9 @@ files
     "../lib/TinyXML/**.h",
     "../lib/TinyXML/**.cpp",
     "../lib/GAP311/**.hpp",
+    "Source/Entity/GameEntity/Component/TransformComponent/**.h",
+    "Source/Entity/GameEntity/Component/ColliderComponent/**.h",
+    "Source/Entity/GameEntity/Component/RenderComponent/SpriteComponent/**.h",
 }
 
 includedirs

@@ -57,7 +57,7 @@ namespace Brokkr
         virtual ~CoreSystems() override = default;
         virtual void Initialize();
 
-        [[nodiscard]] double GetLastDeltaTime() const { return m_DeltaTime; }
+        [[nodiscard]] double GetDeltaTime() const { return m_DeltaTime; }
 
         template <typename CoreSubsystem>
         CoreSubsystem* GetCoreSystem()

@@ -8,6 +8,7 @@
 #include "2DRendering/SDLWindowSystem.h"
 #include "AssetManager/AssetManager.h"
 #include "Entity/GameEntityManager/GameEntityManager.h"
+#include "GameComponents/GameComponentReg.h"
 #include "Scenes/GameScene.h"
 #include "UnitTests/UnitTest.h"
 #include "XMLManager/XMLManager.h"
@@ -56,7 +57,7 @@ public:
 		m_pSceneManager->AddState("GameState", std::make_unique<GameScene>(thisCoreEngine));
 
 		m_pPhysicsManager2D->Init();
-
+		GameComponentsReg::ComponentReg(m_pXmlManager->GetParser<Brokkr::EntityXMLParser>());
 		Brokkr::UnitTest::RegisterEngineVector2Tests(m_pUnitTestSystem);
 
 	}
@@ -105,6 +106,8 @@ int main()
 
 	std::cout << "Welcome to Val Game!\n";
 	auto game = GameCoreSystem();
+	auto gameComponents = GameComponentsReg();
+
 
 	game.Build();
 	game.Initialize();

@@ -1,7 +1,10 @@
 #pragma once
-#include <ColliderComponent.h>
-#include <Component.h>
+
+
 #include <EventManager/EventManager.h>
+
+#include "Entity/GameEntity/GameEntity.h"
+#include "Rectangle.h"
 
 /*#define BROKKR_IGNORE_COORDINATE_Y 1
 #define BROKKR_IGNORE_COORDINATE_X 2

@@ -39,7 +39,7 @@ bool Brokkr::ColliderComponent::Init()
         m_pEventManager->AddHandler(eventStr.c_str(), m_onEnterHandler);
     }
 
-    const auto newPos = m_pOwner->GetComponent<TransformComponent>()->GetTransform().GetPosition();
+    const auto newPos = m_pOwner->GetComponent<TransformComponent>()->GetStartingPos();
     m_transformStart.MoveTo(newPos);
 
     // During init recenter the transform 

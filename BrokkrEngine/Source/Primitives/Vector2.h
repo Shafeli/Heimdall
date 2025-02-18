@@ -27,6 +27,7 @@ namespace Brokkr
         Vector2<TypeName> operator+(const Vector2<TypeName>& other) const { return Vector2<TypeName>(m_x + other.m_x, m_y + other.m_y); }
         Vector2<TypeName> operator-(const Vector2<TypeName>& other) const { return Vector2<TypeName>(m_x - other.m_x, m_y - other.m_y); }
         Vector2<TypeName> operator*(TypeName scalar) const { return Vector2<TypeName>(m_x * scalar, m_y * scalar); }
+        //Vector2<TypeName> operator*(TypeName scalar) { return Vector2<TypeName>(m_x * scalar, m_y * scalar); }
         Vector2<TypeName> operator*(const TypeName matrix[2][2]) const
         {
             return ApplyRotationMatrix(matrix);
@@ -80,6 +81,16 @@ namespace Brokkr
         }
 
         [[nodiscard]] TypeName LengthSquared() const { return ((m_x * m_x) + (m_y * m_y)); }
+
+        [[nodiscard]] Vector2<TypeName> GetClampedLength(TypeName maxLength) const
+        {
+            TypeName length = Length();
+            if (length > maxLength)
+            {
+                return *this * (maxLength / length); // Normalize and multi max length
+            }
+            return *this; // no clamping needed
+        }
 
         [[nodiscard]] Vector2<TypeName> Normalize()
         {

@@ -9,12 +9,18 @@
 
 namespace Brokkr
 {
+    class GameEntityManager;
 
     class GameEntity
     {
         int m_id;
+        std::string m_name;
         bool isEnabled = true;
         std::vector<std::unique_ptr<Component>> m_pComponents;
+    protected:
+        friend GameEntityManager;
+
+        void SetName(const std::string& name) { m_name = name; }
     public:
 
         // Create Object Creation / Deletion 
@@ -23,6 +29,7 @@ namespace Brokkr
 
         GameEntity(const GameEntity& other) = delete;
         GameEntity& operator=(const GameEntity& other) = delete;
+        const std::string& GetName() { return m_name; }
 
         GameEntity(GameEntity&& other) noexcept = default;
         GameEntity& operator=(GameEntity&& other) noexcept = default;

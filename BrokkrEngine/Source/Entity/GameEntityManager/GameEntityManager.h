@@ -60,6 +60,7 @@ namespace Brokkr
         void RenderEntities() const;
 
         GameEntity* GetEntityById(int entityID);
+        GameEntity* GetEntityByName(const std::string& name) const;
 
         std::vector<GameEntity*> GetEntitiesInArea(const Rectangle<float>& area);
 

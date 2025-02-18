@@ -4,18 +4,34 @@
         <TransformComponent x="0" y="0" height="32" width="32" />
         <SpriteComponent texture="Player" active="true" center="true" />
         <ColliderComponent overlap="all" passable="yes" />
+
+        <AgentController Target="FinishLine" MaxSpeed="0.2" MaxAcceleration="0.5" MaxAngVel="0.5" MaxAngAcceleration="0.5" />
     </GameEntity>
 
     <GameEntity name="AI">
         <TransformComponent x="0" y="0" height="32" width="32" />
         <SpriteComponent texture="AI" active="true" center="true" />
         <ColliderComponent overlap="all" passable="yes" />
+
+        <AgentController Target="DoorWay" MaxSpeed="1.0" MaxAcceleration="0.5" MaxAngVel="0.5" MaxAngAcceleration="0.5" />
     </GameEntity>
 
     <GameEntity name="Collider">
         <TransformComponent x="0" y="0" height="32" width="32" />
-        <SpriteComponent texture="Square" active="false" center="false" />
+        <SpriteComponent texture="Square" active="true" center="false" />
         <ColliderComponent overlap="dynamic" passable="no" />
+    </GameEntity>
+
+    <GameEntity name="DoorWay">
+        <TransformComponent x="0" y="0" height="32" width="32" />
+        <SpriteComponent texture="Square" active="true" center="false" />
+        <ColliderComponent overlap="dynamic" passable="yes" />
+    </GameEntity>
+
+    <GameEntity name="FinishLine">
+        <TransformComponent x="0" y="0" height="32" width="32" />
+        <SpriteComponent texture="Square" active="true" center="false" />
+        <ColliderComponent overlap="dynamic" passable="yes" />
     </GameEntity>
 
 </Entity>

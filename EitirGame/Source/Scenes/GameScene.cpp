@@ -53,9 +53,13 @@ void GameScene::Enter()
 {
     
     m_pPhysicsManager->SetWorldSize({ 1024.f, 768.f });
+    m_pEntityManager->ConstructWithLocation("Collider", "GameEntities.XML", "GameScene.tmx");
+    m_pEntityManager->ConstructWithLocation("DoorWay", "GameEntities.XML", "GameScene.tmx");
+    m_pEntityManager->ConstructWithLocation("FinishLine", "GameEntities.XML", "GameScene.tmx");
+
     m_pEntityManager->ConstructWithLocation("Player", "GameEntities.XML", "GameScene.tmx");
     m_pEntityManager->ConstructWithLocation("AI", "GameEntities.XML", "GameScene.tmx");
-    m_pEntityManager->ConstructWithLocation("Collider", "GameEntities.XML", "GameScene.tmx");
+
 }
 
 void GameScene::Destroy()

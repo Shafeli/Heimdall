@@ -118,6 +118,19 @@ Brokkr::GameEntity* Brokkr::GameEntityManager::GetEntityById(int entityID)
     return m_entities[it->second];
 }
 
+Brokkr::GameEntity* Brokkr::GameEntityManager::GetEntityByName(const std::string& name) const
+{
+    for (GameEntity* entity : m_entities)
+    {
+        if (entity->GetName() == name)
+        {
+            return entity;
+        }
+    }
+
+    return nullptr;
+}
+
 std::vector<Brokkr::GameEntity*> Brokkr::GameEntityManager::GetEntitiesInArea(const Rectangle<float>& area)
 {
     const auto objectIds = m_pPhysicsManager->QueryAreaAll(area);
@@ -177,6 +190,8 @@ std::list<Brokkr::GameEntity*> Brokkr::GameEntityManager::ConstructWithLocation(
 
         if (pCollider != nullptr)
             pCollider->AdjustByPos(data);
+
+        pInitList.back()->SetName(prefabName);
 
     }
 

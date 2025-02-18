@@ -1,5 +1,5 @@
 #pragma once
-#include "GameEntity.h"
+#include "Entity/GameEntity/GameEntity.h"
 #include "Rectangle.h"
 #include "Vector2.h"
 #include "2DPhysicsManager/PhysicsManager.h"
