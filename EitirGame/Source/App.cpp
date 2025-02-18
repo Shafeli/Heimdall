@@ -36,7 +36,10 @@ public:
 		m_pSdlWindowManager = AddCoreSystem<Brokkr::SDLWindowSystem>();
 		m_pEntityManager = AddCoreSystem<Brokkr::GameEntityManager>();
 
-		auto pMainWindow = m_pSdlWindowManager->AddWindow<Brokkr::SDLWindow>(Brokkr::EngineDefinitions::GAME_WINDOW_NAME, 1024, 768);
+		//auto pMainWindow = m_pSdlWindowManager->AddWindow<Brokkr::SDLWindow>(Brokkr::EngineDefinitions::GAME_WINDOW_NAME, 1024, 768);
+		//auto pMainRenderer = m_pSdlWindowManager->GetRendererForWindow(pMainWindow);
+
+	    auto pMainWindow = m_pSdlWindowManager->AddVulkanRenderedWindow<Brokkr::SDLWindow>(Brokkr::EngineDefinitions::GAME_WINDOW_NAME, 1024, 768);
 		auto pMainRenderer = m_pSdlWindowManager->GetRendererForWindow(pMainWindow);
 
 		m_pAssetManager = AddCoreSystem<Brokkr::AssetManager>(pMainRenderer, pMainWindow, Brokkr::EngineDefinitions::ASSETS_PATH);

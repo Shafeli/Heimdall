@@ -26,15 +26,15 @@ namespace Brokkr
             BuildRenderer();
         }
 
-        ~SDLRenderer();
+        virtual ~SDLRenderer();
 
-        void BuildRenderer();
-        void ClearRenderer() const;
+        virtual void BuildRenderer();
+        virtual void ClearRenderer();
 
         void RenderCopy(SDL_Texture* texture, int x, int y, int w, int h) const;
         void RenderCopy(SDL_Texture* texture, Rectangle<int> transform, Rectangle<int> sourceTransform) const;
 
-        void DisplayRender() const;
+        virtual void DisplayRender();
 
         void SetRenderDrawColor(const Color* pColor) const;
 
@@ -48,6 +48,6 @@ namespace Brokkr
 
         [[nodiscard]] SDL_Renderer* GetRenderer() const { return m_pRenderer; }
 
-        void Destroy();
+        virtual void Destroy();
     };
 }

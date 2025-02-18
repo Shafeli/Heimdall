@@ -14,7 +14,7 @@ void Brokkr::SDLRenderer::BuildRenderer()
     m_pRenderer = SDL_CreateRenderer(m_pWindow->GetWindow(), -1, SDL_RENDERER_ACCELERATED);
 }
 
-void Brokkr::SDLRenderer::ClearRenderer() const
+void Brokkr::SDLRenderer::ClearRenderer()
 {
     SDL_RenderClear(m_pRenderer);
 }
@@ -49,7 +49,7 @@ void Brokkr::SDLRenderer::RenderCopy(SDL_Texture* texture, Rectangle<int> transf
     SDL_RenderCopy(m_pRenderer, texture, &source, &destination);
 }
 
-void Brokkr::SDLRenderer::DisplayRender() const
+void Brokkr::SDLRenderer::DisplayRender()
 {
     SDL_RenderPresent(m_pRenderer);
 }

@@ -8,6 +8,7 @@ staticruntime "off"
 files {
     "Source/**.h",
     "Source/**.cpp",
+
 }
 
 includedirs
@@ -17,6 +18,7 @@ includedirs
     "../lib/TinyXML",         -- Local TinyXML headers
     "../BrokkrEngine/Source", -- Include BrokkrEngine
     "../BrokkrEngine/Source/Primitives/",
+    "../lib/GAP311/**.hpp",
 }
 
 links

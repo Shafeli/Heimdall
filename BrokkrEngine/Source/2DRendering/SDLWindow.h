@@ -25,7 +25,10 @@ namespace Brokkr
         bool BuildWindow(const char* pTitle, int width, int height);
 
         [[nodiscard]] const char* GetTitle() const { return m_pWindowTitle; }
-        [[nodiscard]] SDL_Window* GetWindow() const { return m_pWindow; }
+        [[nodiscard]] SDL_Window* GetWindow() { return m_pWindow; }
+
+        [[nodiscard]] int GetWindowWidth() const { return m_width; }
+        [[nodiscard]] int GetWindowHeight() const { return m_height; }
 
         void Destroy();
     };

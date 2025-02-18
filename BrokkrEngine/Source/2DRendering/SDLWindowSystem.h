@@ -9,6 +9,7 @@
 #include "Core/Core.h"
 #include "2DRendering/SDLWindow.h"
 
+
 // TODO: Edge cases possible issues SDLWindowManagement system
 /*
     * Adding auxiliary renderers for a window would break index and window organization
@@ -17,6 +18,7 @@
 namespace Brokkr
 {
     class SDLRenderer;
+    class VulkanRenderer;
 
     class SDLWindowSystem final : public Brokkr::System
     {
@@ -47,6 +49,26 @@ namespace Brokkr
 
         // Add a new window
         template <typename SDLWindow, typename... Args>
+        SDLWindow* AddVulkanRenderedWindow(Args&&... args)
+        {
+            static_assert(std::is_base_of_v<Brokkr::SDLWindow, SDLWindow>,
+                "Window must derive from Brokkr::SDLWindow");
+
+            auto newWindow = std::make_unique<SDLWindow>(std::forward<Args>(args)...);
+            SDLWindow* result = newWindow.get();
+            m_pWindows.emplace_back(std::move(newWindow));
+
+            if (result)
+            {
+                // Create a default renderer tied to this window
+                AddRenderer<VulkanRenderer>(result);
+            }
+
+            return result;
+        }
+
+        // Add a new window
+        template <typename SDLWindow, typename... Args>
         SDLWindow* AddWindow(Args&&... args)
         {
             static_assert(std::is_base_of_v<Brokkr::SDLWindow, SDLWindow>,
@@ -64,6 +86,10 @@ namespace Brokkr
 
             return result;
         }
+
+        // Add a new renderer for a window
+        template <typename SDLRenderer, typename... Args>
+        SDLRenderer* AddRenderer(SDLWindow* window, Args&&... args);
 
         // Remove a window and its renderer
         template <typename SDLWindow>
@@ -129,20 +155,6 @@ namespace Brokkr
 
     private:
 
-        // Add a new renderer for a window
-        template <typename SDLRenderer, typename... Args>
-        SDLRenderer* AddRenderer(SDLWindow* window, Args&&... args)
-        {
-            static_assert(std::is_base_of_v<Brokkr::SDLRenderer, SDLRenderer>,
-                "Renderer must derive from Brokkr::SDLRenderer");
-
-            auto newRenderer = std::make_unique<SDLRenderer>(window, std::forward<Args>(args)...);
-            SDLRenderer* result = newRenderer.get();
-            m_pRenderers.emplace_back(std::move(newRenderer));
-
-            return result;
-        }
-
         // Get a renderer by its index
         SDLRenderer* GetRenderer(size_t index) const
         {
@@ -164,5 +176,6 @@ namespace Brokkr
         }
 
     };
+
 
 }
